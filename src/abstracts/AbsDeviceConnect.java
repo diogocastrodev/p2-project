@@ -1,5 +1,7 @@
 package abstracts;
 
+import classes.exceptions.InvalidArgumentException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +22,13 @@ public abstract class AbsDeviceConnect extends AbsDevice {
      */
     private Map<Integer, AbsDevice> devices;
 
-    public AbsDeviceConnect(String ip, String mac, int portCount) {
+    public AbsDeviceConnect(String ip, String mac, int portCount) throws InvalidArgumentException {
         super(ip, mac);
         this.setPortCount(portCount);
         devices = new HashMap<>();
     }
 
-    public AbsDeviceConnect(String ip, String mac, AbsDevice connectedDevice, int portCount) {
+    public AbsDeviceConnect(String ip, String mac, AbsDevice connectedDevice, int portCount) throws InvalidArgumentException {
         super(ip, mac, connectedDevice);
         this.setPortCount(portCount);
         devices = new HashMap<>();
@@ -43,7 +45,7 @@ public abstract class AbsDeviceConnect extends AbsDevice {
      * Set the amount of ports available on the hub
      * @param portCount Amount of ports available on the hub (Must be at least 2)
      */
-    public void setPortCount(int portCount) {
+    public void setPortCount(int portCount) throws IllegalArgumentException {
         if (portCount < 2) { // 1 port for input, At least 1 port for output
             throw new IllegalArgumentException("Port count must be at least 2");
         }
@@ -63,7 +65,7 @@ public abstract class AbsDeviceConnect extends AbsDevice {
      * @param devices Devices to add
      * @return List of devices successfully added
      */
-    public List<AbsDevice> addDevices(AbsDevice ...devices) {
+    public List<AbsDevice> addDevices(AbsDevice ...devices) throws IllegalArgumentException {
         if (this.devices.size() >= portCount) {
             throw new IllegalArgumentException("Maximum number of devices reached");
         }
@@ -80,7 +82,7 @@ public abstract class AbsDeviceConnect extends AbsDevice {
      * @param devices Devices to add
      * @return List of devices successfully added
      */
-    public List<AbsDevice> addDevices(AbsDeviceConnect ...devices) {
+    public List<AbsDevice> addDevices(AbsDeviceConnect ...devices) throws IllegalArgumentException {
         if (this.devices.size() >= portCount) {
             throw new IllegalArgumentException("Maximum number of devices reached");
         }
@@ -97,7 +99,7 @@ public abstract class AbsDeviceConnect extends AbsDevice {
      * @param port Port number of the device to remove
      * @return boolean indicating if the device was removed
      */
-    public boolean removeDevice(int port) {
+    public boolean removeDevice(int port) throws IllegalArgumentException {
         if (port < 1 || port > this.portCount) {
             throw new IllegalArgumentException("Invalid port number");
         }

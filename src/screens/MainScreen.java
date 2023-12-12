@@ -3,11 +3,16 @@ package screens;
 import cache.Cache;
 import classes.devices.Device;
 import enums.Connection;
+import test_tools.TestTools;
 
 public class MainScreen {
     public MainScreen() {
         System.out.println("MainScreen");
         Utils.clearScreen();
-        System.out.println(new Device("192.132.123.212", "00-00-00-00-00-00", "diogo-pc", Connection.ETHERNET));
+        try {
+            System.out.println(new Device(new TestTools().generateIP(), new TestTools().generateMac(), "diogo-pc", Connection.ETHERNET));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

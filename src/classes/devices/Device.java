@@ -1,6 +1,7 @@
 package classes.devices;
 
 import abstracts.AbsDevice;
+import classes.exceptions.InvalidArgumentException;
 import enums.Connection;
 
 public class Device extends AbsDevice {
@@ -20,7 +21,7 @@ public class Device extends AbsDevice {
      * @param ip The IP address of the device
      * @param mac The MAC address of the device
      */
-    public Device(String ip, String mac) {
+    public Device(String ip, String mac) throws InvalidArgumentException {
         super(ip, mac);
     }
 
@@ -30,12 +31,12 @@ public class Device extends AbsDevice {
      * @param mac The MAC address of the device
      * @param name The name of the device
      */
-    public Device(String ip, String mac, String name) {
+    public Device(String ip, String mac, String name) throws InvalidArgumentException {
         super(ip, mac);
         this.setName(name);
     }
 
-    public Device(String ip, String mac, String name, Connection connection) {
+    public Device(String ip, String mac, String name, Connection connection) throws InvalidArgumentException {
         super(ip, mac);
         this.setName(name);
         this.setConnection(connection);
