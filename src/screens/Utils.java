@@ -1,6 +1,27 @@
 package screens;
 
+import enums.Status;
+
 public class Utils {
+
+
+
+
+    /**
+     * Statuses for devices.
+     */
+    public static String convertStatus (Status status) {
+        switch (status) {
+            case UP:
+                return "🟢";
+            case DOWN:
+                return "⚫️";
+            case ERROR:
+            default:
+                return "🔴";
+        }
+    }
+
 
     /**
      * Clears the screen.
@@ -43,8 +64,9 @@ public class Utils {
         {
             e.printStackTrace();
         }*/
-
-        for (int i = 0; i < 30; i++) {
+        // Get the height of the terminal window
+        int height = 50;
+        for (int i = 0; i < height; i++) {
             System.out.println();
         }
     }

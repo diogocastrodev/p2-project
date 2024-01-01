@@ -1,18 +1,34 @@
 package screens;
 
-import cache.Cache;
-import classes.devices.Device;
-import enums.Connection;
-import test_tools.TestTools;
+import abstracts.AbsScreen;
+import classes.exceptions.InvalidOptionException;
 
-public class MainScreen {
-    public MainScreen() {
-        System.out.println("MainScreen");
-        Utils.clearScreen();
-        try {
-            System.out.println(new Device(new TestTools().generateIP(), new TestTools().generateMac(), "diogo-pc", Connection.ETHERNET));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+public class MainScreen extends AbsScreen {
+
+    public void drawMenu() {
+        System.out.println("1. Criar uma nova rede");
+        System.out.println("2. Selecionar uma rede");
+        System.out.println("3. Listar redes existentes");
+        System.out.println("0. Sair");
+    }
+
+    @Override
+    public void handleOption(int option) throws InvalidOptionException {
+        switch (option) {
+            case 1:
+                // this.createNewNetwork();
+                break;
+            case 2:
+                // this.selectNetwork();
+                break;
+            case 3:
+                // this.listNetworks();
+                break;
+            case 0:
+                System.exit(0);
+                break;
+            default:
+                throw new InvalidOptionException();
         }
     }
 }

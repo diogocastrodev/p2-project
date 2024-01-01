@@ -1,10 +1,13 @@
 package classes.devices;
 
-import abstracts.AbsDevice;
+import abstracts.AbsDeviceEnd;
+import classes.addresses.IP;
+import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
+import classes.packages.Packet;
 import enums.Connection;
 
-public class Device extends AbsDevice {
+public class Device extends AbsDeviceEnd {
 
     /**
      * The name of the device
@@ -21,7 +24,7 @@ public class Device extends AbsDevice {
      * @param ip The IP address of the device
      * @param mac The MAC address of the device
      */
-    public Device(String ip, String mac) throws InvalidArgumentException {
+    public Device(IP ip, Mac mac) throws InvalidArgumentException {
         super(ip, mac);
     }
 
@@ -31,12 +34,12 @@ public class Device extends AbsDevice {
      * @param mac The MAC address of the device
      * @param name The name of the device
      */
-    public Device(String ip, String mac, String name) throws InvalidArgumentException {
+    public Device(IP ip, Mac mac, String name) throws InvalidArgumentException {
         super(ip, mac);
         this.setName(name);
     }
 
-    public Device(String ip, String mac, String name, Connection connection) throws InvalidArgumentException {
+    public Device(IP ip, Mac mac, String name, Connection connection) throws InvalidArgumentException {
         super(ip, mac);
         this.setName(name);
         this.setConnection(connection);
@@ -79,18 +82,28 @@ public class Device extends AbsDevice {
      * @param connection The Device's connection type
      */
     public void setConnection(String connection) {
-        this.connection = Connection.valueOf(connection.toUpperCase());
+        this.connection = Connection.valueOf(connection.toUpperCase()); // Pegar numa String e converter para um ENUM
     }
 
     @Override
     public String toString() {
-        String name = this.getName() != null ? this.getName() : "unknown";
-        String connection = this.getConnection() != null ? this.getConnection().name() : "unknown";
+        String name = this.getName() != null ? this.getName() : "unknown"; // Se o nome for null, então é "unknown"
+        String connection = this.getConnection() != null ? this.getConnection().name() : "unknown"; // Se a conexão for null, então é "unknown"
         return "{" +
                 "name='" + name + '\'' +
                 ", connection='" + connection + '\'' +
-                ", ip='" + super.getIp() + '\'' +
+                ", ip='" + this.getIP() + '\'' +
                 ", mac='" + super.getMac() + '\'' +
                 '}';
+    }
+
+    @Override
+    public void sendPacket(Packet packet) {
+
+    }
+
+    @Override
+    public Packet processPacket(Packet packet) {
+        return null;
     }
 }

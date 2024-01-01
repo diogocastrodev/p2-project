@@ -1,20 +1,27 @@
 package classes.devices;
 
-import abstracts.AbsDevice;
-import abstracts.AbsDeviceConnect;
-import classes.devices.Device;
+import classes.addresses.IP;
+import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
+import classes.protocols.DHCP;
 
-import java.util.List;
+// Router'll be considered a switch but with different way to process
+public class Router extends Switch {
 
-public class Router extends AbsDeviceConnect {
+    private String ssid;
+    private String password;
 
+    private IP gateway;
+    private IP subnetMask;
+    private IP dns1;
+    private IP dns2;
 
-    public Router(String ip, String mac, int portCount) throws InvalidArgumentException {
-        super(ip, mac, portCount);
-    }
+    private String username;
+    private String passwordAdmin;
 
-    public Router(String ip, String mac, AbsDevice connectedDevice, int portCount) throws InvalidArgumentException  {
-        super(ip, mac, connectedDevice, portCount);
+    private DHCP dhcp;
+
+    public Router(Mac mac, int portCount) throws InvalidArgumentException  {
+        super(mac, portCount);
     }
 }

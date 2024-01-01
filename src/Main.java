@@ -1,9 +1,15 @@
-import cache.Cache;
+import abstracts.Cache;
 import screens.MainScreen;
 
 public class Main {
     public static void main(String[] args) {
-        new Cache();
-        new MainScreen();
+        try
+        {
+            new MainScreen();
+        }
+        catch (Exception e)
+        {
+            // System.out.println(e.getMessage());
+        }
     }
 }

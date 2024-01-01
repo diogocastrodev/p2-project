@@ -1,0 +1,8 @@
+---- Creating a new Network ----
+
+* When creating a new network it'll give this options:
+    - Router (Connection to outside)
+    - Switch
+    - Hub
+    - Access Point
+    - Computer

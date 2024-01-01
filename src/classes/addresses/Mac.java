@@ -41,16 +41,16 @@ public class Mac {
             } else if (mac.contains(":")) { // Mac Address com ":"
                 macParts = mac.split(":"); // Dividir em partes
             } else { // Inválido
-                throw new InvalidArgumentException("Inválido", "Mac");
+                throw new InvalidArgumentException("Inválido", "Mac"); // Inválido
             }
         } else if (mac.length() == 12) {
             // Mac Adress but without ":" or "-"
-            mac.split("(?<=\\G..)");
+            mac.split("(?<=\\G..)"); // Dividir em partes de 2 em 2
         } else // Inválido
-            throw new InvalidArgumentException("Inválido", "Mac");
+            throw new InvalidArgumentException("Inválido", "Mac"); // Inválido
 
         if (macParts.length != 6) { // Se não tiver 6 partes
-            throw new InvalidArgumentException("Mal estruturado", "Mac");
+            throw new InvalidArgumentException("Mal estruturado", "Mac"); // Inválido
         }
 
         for (int i = 0; i < macParts.length; i++) { // Verificar cada parte
@@ -64,7 +64,7 @@ public class Mac {
             }
         }
         // Forçar padrão 00:00:00:00:00:00 no programa
-        mac = String.join(":", macParts);
+        mac = String.join(":", macParts); // Para cada parte, adicionar ":"
         // Válido
         this.mac = mac;
     }
@@ -74,7 +74,7 @@ public class Mac {
      * @return String[] Mac Address
      */
     public String[] parseMac() {
-        return this.getMac().split(":");
+        return this.getMac().split(":"); // Dividir em partes a cada ":"
     }
 
     /**

@@ -1,4 +1,4 @@
-package cache;
+package abstracts;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,19 +6,23 @@ import java.util.Map;
 /**
  * Cache class to store data and be able to access it from anywhere.
  */
-public class Cache {
+public abstract class Cache<E,V> {
 
     /**
      * HashMap to store the cache.
      */
-    private static final Map<String, Object> cache = new HashMap<>();
+    private Map<E, V> cache;
+
+    public Cache(Map<E,V> cache) {
+        this.cache = cache;
+    }
 
     /**
      * Put a value in the cache.
      * @param key - The key to store the value.
      * @param value - The value to store.
      */
-    public static void put(String key, Object value) {
+    public void put(E key, V value) {
         cache.put(key, value);
     }
 
@@ -27,7 +31,7 @@ public class Cache {
      * @param key - The key to get the value.
      * @return - The value.
      */
-    public static Object get(String key) {
+    public V get(E key) {
         return cache.get(key);
     }
 
@@ -35,14 +39,14 @@ public class Cache {
      * Remove a value from the cache.
      * @param key - The key to remove the value.
      */
-    public static void remove(String key) {
+    public void remove(E key) {
         cache.remove(key);
     }
 
     /**
      * Clear the cache.
      */
-    public static void clear() {
+    public void clear() {
         cache.clear();
     }
 
@@ -51,7 +55,7 @@ public class Cache {
      * @param key - The key to check.
      * @return - True if the cache contains the key, false otherwise.
      */
-    public static boolean containsKey(String key) {
+    public boolean containsKey(E key) {
         return cache.containsKey(key);
     }
 
@@ -60,7 +64,7 @@ public class Cache {
      * @param value - The value to check.
      * @return - True if the cache contains the value, false otherwise.
      */
-    public static boolean containsValue(Object value) {
+    public boolean containsValue(V value) {
         return cache.containsValue(value);
     }
 
@@ -68,7 +72,7 @@ public class Cache {
      * Get the size of the cache.
      * @return
      */
-    public static int size() {
+    public int size() {
         return cache.size();
     }
 
@@ -76,7 +80,7 @@ public class Cache {
      * Check if the cache is empty.
      * @return - True if the cache is empty, false otherwise.
      */
-    public static boolean isEmpty() {
+    public boolean isEmpty() {
         return cache.isEmpty();
     }
 
@@ -84,7 +88,7 @@ public class Cache {
      * Get the cache.
      * @return - The cache.
      */
-    public static Map<String, Object> getCache() {
+    public Map<E, V> getCache() {
         return cache;
     }
 }

@@ -1,5 +1,8 @@
 package test_tools;
 
+/**
+ * Class with tools to execute some tests (Generators, etc)
+ */
 public class TestTools {
 
     /*-----------------------------------------------------------------------*/
@@ -7,7 +10,7 @@ public class TestTools {
     /*-----------------------------------------------------------------------*/
     /**
      * Generates a random IP address
-     * @return
+     * @return IP (***.***.***.***)
      */
     public String generateIP() {
         String ip = "";
@@ -20,6 +23,11 @@ public class TestTools {
         return ip;
     }
 
+    /**
+     * Generates a random IP address
+     * @param v1 First octet
+     * @return IP (v1.***.***.***)
+     */
     public String generateIP(int v1) {
         String ip = String.valueOf(v1) + ".";
 
@@ -33,6 +41,12 @@ public class TestTools {
         return ip;
     }
 
+    /**
+     * Generates a random IP address
+     * @param v1 First octet
+     * @param v2 Second octet
+     * @return IP (v1.v2.***.***)
+     */
     public String generateIP(int v1, int v2) {
         String ip = String.valueOf(v1) + "." + String.valueOf(v2) + ".";
 
@@ -46,6 +60,13 @@ public class TestTools {
         return ip;
     }
 
+    /**
+     * Generates a random IP address
+     * @param v1 First octet
+     * @param v2 Second octet
+     * @param v3 Third octet
+     * @return IP (v1.v2.v3.***)
+     */
     public String generateIP(int v1, int v2, int v3) {
         String ip = String.valueOf(v1) + "." + String.valueOf(v2) + "." + String.valueOf(v3) + ".";
 
@@ -54,6 +75,10 @@ public class TestTools {
         return ip;
     }
 
+    /**
+     * Generates an octet (0-255)
+     * @return Octet
+     */
     public String generateOctet() {
         return String.valueOf((int) (Math.random() * 256));
     }
@@ -64,7 +89,7 @@ public class TestTools {
     /*-----------------------------------------------------------------------*/
     /**
      * Generates a random Mac address
-     * @return
+     * @return MAC (**:**:**:**:**:**)
      */
     public String generateMac() {
         String mac = "";
@@ -79,7 +104,7 @@ public class TestTools {
 
     /**
      * Generates a Pair of Hex digits
-     * @return
+     * @return Hex Pair (00-FF)
      */
     private String generateHexPair() {
         String hex = "";
@@ -91,7 +116,7 @@ public class TestTools {
 
     /**
      * Generates a Hex digit
-     * @return
+     * @return Hex digit (0-F)
      */
     private String generateHexDigit() {
         int digit = (int) (Math.random() * 16);

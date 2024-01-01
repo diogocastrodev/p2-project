@@ -2,103 +2,103 @@ package abstracts;
 
 import classes.addresses.IP;
 import classes.addresses.Mac;
-import classes.exceptions.InvalidArgumentException;
+import classes.packages.Packet;
+import enums.Status;
 
-/**
- * Abstract class for a common device
- */
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class AbsDevice {
+    /**************************************************************************
+     * Variables
+     **************************************************************************/
     /**
-     * IP address of the device
+     * Status of the device
      */
-    private IP ip;
+    private Status status;
     /**
      * MAC address of the device
      */
     private Mac mac;
     /**
-     * Device connected to this device
-     * This is used to create a network
-     * Can be null
+     * ARP Table of the device
      */
-    private AbsDevice connectedDevice;
+    private Map<Mac, IP> arpTable;
 
+    /**************************************************************************
+     * Constructors
+     **************************************************************************/
     /**
      * Constructor
-     * @param ip IP address
      * @param mac MAC address
      */
-    public AbsDevice(String ip, String mac) throws InvalidArgumentException {
-        this.setIp(ip);
-        this.setMac(mac);
+    public AbsDevice(Mac mac) {
+        this.setMac(mac); // Set the MAC address
+        this.setStatus(Status.DOWN); // Set the status to DOWN
+        this.arpTable = new HashMap<>(); // Initialize the ARP Table
+    }
+
+    /**************************************************************************
+     * Getters and Setters
+     **************************************************************************/
+    /**
+     * Get the status of the device
+     * @return Status of the device
+     */
+    public Status getStatus() {
+        return status;
     }
 
     /**
-     * Constructor
-     * @param ip IP address
-     * @param mac MAC address
-     * @param connectedDevice Device connected to this device
+     * Set the status of the device
+     * @param status Status of the device
      */
-    public AbsDevice(String ip, String mac, AbsDevice connectedDevice) throws InvalidArgumentException {
-        this.setIp(ip);
-        this.setMac(mac);
-        this.setConnectedDevice(connectedDevice);
-    }
-
-    /**
-     * Get the device connected to this device
-     * @return Device connected to this device
-     */
-    public AbsDevice getConnectedDevice() {
-        return connectedDevice;
-    }
-
-    /**
-     * Set the device connected to this device
-     * @param connectedDevice Device connected to this device
-     */
-    public void setConnectedDevice(AbsDevice connectedDevice) {
-        this.connectedDevice = connectedDevice;
-    }
-
-    /**
-     * Get the IP address of the device
-     * @return IP address of the device
-     */
-    public String getIp() {
-        return this.ip.getIP();
-    }
-
-    /**
-     * Set the IP address of the device
-     * @param ip IP address of the device
-     */
-    public void setIp(String ip) throws InvalidArgumentException {
-        this.ip = new IP(ip);
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     /**
      * Get the MAC address of the device
      * @return MAC address of the device
      */
-    public String getMac() {
-        return this.mac.getMac();
+    public Mac getMac() {
+        return mac;
     }
 
     /**
-     * Set the MAC address of the device (00:00:00:00:00:00 | 00-00-00-00-00-00 | 000000000000)
+     * Set the MAC address of the device
      * @param mac MAC address of the device
      */
-    public void setMac(String mac) throws InvalidArgumentException {
-        this.mac = new Mac(mac);
+    public void setMac(Mac mac) {
+        this.mac = mac;
     }
 
+    /**************************************************************************
+     * Methods
+     **************************************************************************/
+
     /**
-     * Get the device type
-     * @return Device type
+     * Logistic behind this:
+     * 1. Device A - sendPacket() is called
+     * 2. Device A - sendPacket() calls processPacket() - Device B
+     * 3. Device B - processPacket() Will send the packet to the correct device - Device C
+     * 4. Device C - the correct device will return a packet with information - Device B
+     * 5. Device B - return the packet received from Device C - Device A
+     * 6. Device A - got the packet it wanted
      */
-    @Override
-    public String toString() {
-        return "IP: " + this.getIp() + "\nMAC: " + this.getMac();
-    }
+
+    /**
+     * Send a packet to the device
+     * @param packet
+     */
+    public abstract void sendPacket(Packet packet);
+
+    /**
+     * Process a packet (send to correct device or process the packet)
+     * @param packet Packet to process
+     * @return Packet to send
+     */
+    public abstract Packet processPacket(Packet packet);
+
+
 }
