@@ -1,4 +1,4 @@
-package classes.protocols;
+package classes.dhcp;
 
 import classes.addresses.IP;
 import enums.DHCPType;

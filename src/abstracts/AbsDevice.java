@@ -17,6 +17,10 @@ public abstract class AbsDevice {
      */
     private Status status;
     /**
+     * IP address of the device
+     */
+    private IP ip;
+    /**
      * MAC address of the device
      */
     private Mac mac;
@@ -32,8 +36,9 @@ public abstract class AbsDevice {
      * Constructor
      * @param mac MAC address
      */
-    public AbsDevice(Mac mac) {
+    public AbsDevice(Mac mac, IP ip) {
         this.setMac(mac); // Set the MAC address
+        this.setIP(ip); // Set the IP address
         this.setStatus(Status.DOWN); // Set the status to DOWN
         this.arpTable = new HashMap<>(); // Initialize the ARP Table
     }
@@ -71,6 +76,22 @@ public abstract class AbsDevice {
      */
     public void setMac(Mac mac) {
         this.mac = mac;
+    }
+
+    /**
+     * Get the IP address of the device
+     * @return IP address of the device
+     */
+    public IP getIP() {
+        return ip;
+    }
+
+    /**
+     * Set the IP address of the device
+     * @param ip IP address of the device
+     */
+    public void setIP(IP ip) {
+        this.ip = ip;
     }
 
     /**************************************************************************

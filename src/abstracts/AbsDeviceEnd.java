@@ -23,10 +23,6 @@ public abstract class AbsDeviceEnd extends AbsDevice {
      * The device connected to this device.
      */
     private AbsDevice connectedDevice;
-    /**
-     * IP address of the device
-     */
-    private IP ip;
 
     /**************************************************************************
      * Constructors
@@ -37,7 +33,7 @@ public abstract class AbsDeviceEnd extends AbsDevice {
      * @param mac MAC address
      */
     public AbsDeviceEnd(IP ip, Mac mac) {
-        super(mac);
+        super(mac, ip);
         this.setConnection(Connection.ETHERNET);
     }
     /**************************************************************************
@@ -98,22 +94,6 @@ public abstract class AbsDeviceEnd extends AbsDevice {
         AbsDeviceNetwork t = ((AbsDeviceNetwork) connectedDevice);
         t.setPort(port, this);
         this.forceSetConnectedDevice(connectedDevice);
-    }
-
-    /**
-     * Get the IP address of the device
-     * @return IP address of the device
-     */
-    public IP getIP() {
-        return ip;
-    }
-
-    /**
-     * Set the IP address of the device
-     * @param ip IP address of the device
-     */
-    public void setIP(IP ip) {
-        this.ip = ip;
     }
 
     /**************************************************************************

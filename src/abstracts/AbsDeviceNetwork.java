@@ -1,8 +1,9 @@
 package abstracts;
 
+import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
-import classes.protocols.DHCPDist;
+import classes.dhcp.DHCPDist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +40,8 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
      * Constructor
      * @param mac MAC address
      */
-    public AbsDeviceNetwork(Mac mac, int portsAmount) throws InvalidArgumentException {
-        super(mac);
+    public AbsDeviceNetwork(Mac mac, IP ip, int portsAmount) throws InvalidArgumentException {
+        super(mac, ip);
         this.setPortsAmount(portsAmount);
         this.ports = new HashMap<>(portsAmount);
     }

@@ -15,7 +15,11 @@ public class TestTools {
     public String generateIP() {
         String ip = "";
         for (int i = 0; i < 4; i++) {
-            ip += generateOctet();
+            String octet = generateOctet();
+            while (octet.equals("0")) {
+                octet = generateOctet();
+            }
+            ip += octet;
             if (i < 3) {
                 ip += ".";
             }
@@ -81,9 +85,6 @@ public class TestTools {
      */
     public String generateOctet() {
         int octet = (int) (Math.random() * 256); // 0 - 255
-        while (octet == 0) { // Não pode ser 0
-            octet = (int) (Math.random() * 256);
-        }
         return String.valueOf(octet);
     }
 

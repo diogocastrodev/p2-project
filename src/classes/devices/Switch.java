@@ -1,6 +1,7 @@
 package classes.devices;
 
 import abstracts.AbsDeviceNetwork;
+import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import classes.packages.Packet;
@@ -12,8 +13,8 @@ public class Switch extends AbsDeviceNetwork {
 
     private Map<Mac, Integer> table;
 
-    public Switch(Mac mac, int portCount) throws InvalidArgumentException {
-        super(mac, portCount);
+    public Switch(Mac mac, IP ip, int portCount) throws InvalidArgumentException {
+        super(mac, ip, portCount);
         table = new HashMap<>();
     }
 
