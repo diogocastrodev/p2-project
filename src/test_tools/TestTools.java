@@ -80,7 +80,11 @@ public class TestTools {
      * @return Octet
      */
     public String generateOctet() {
-        return String.valueOf((int) (Math.random() * 256));
+        int octet = (int) (Math.random() * 256); // 0 - 255
+        while (octet == 0) { // Não pode ser 0
+            octet = (int) (Math.random() * 256);
+        }
+        return String.valueOf(octet);
     }
 
 

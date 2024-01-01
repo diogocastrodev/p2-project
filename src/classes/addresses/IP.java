@@ -38,9 +38,9 @@ public class IP {
         if (ipPartsStr.length != 4) { // Se não tiver 4 partes
             throw new InvalidArgumentException("Endereço IP inválido", "IP"); // Inválido
         }
-        if (ipPartsStr[4].contains(":")) { // Se tiver ":" (porta)
-            String[] ipPartsStrPort = ipPartsStr[4].split(":"); // Separar o IP a cada ":"
-            ipPartsStr[4] = ipPartsStrPort[0]; // IP sem a porta
+        if (ipPartsStr[3].contains(":")) { // Se tiver ":" (porta)
+            String[] ipPartsStrPort = ipPartsStr[3].split(":"); // Separar o IP a cada ":"
+            ipPartsStr[3] = ipPartsStrPort[0]; // IP sem a porta
             try {
                 this.setPort(Integer.parseInt(ipPartsStrPort[1]));
             } catch (Exception e) {

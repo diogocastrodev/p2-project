@@ -115,6 +115,10 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
         this.ports.put(port, device); // Adicionar o device ao port
     }
 
+    public void connectDevice(int port, AbsDevice device) throws InvalidArgumentException {
+        this.setPort(port, device);
+    }
+
     public void forceSetPort(int port, AbsDevice device) {
         this.ports.put(port, device);
     }
@@ -136,13 +140,21 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
             throw new InvalidArgumentException("Port is already in use"); // Mensagem de erro
         }
         AbsDeviceNetwork t = ((AbsDeviceNetwork) device);
+        if (portDevice <= 0 || portDevice > t.getPortsAmount()) { // Verificar se o portDevice é válido
+            throw new InvalidArgumentException("PortDevice is not valid"); // Mensagem de erro
+        }
         AbsDevice b = t.getPort(portDevice); // Verificar se o portDevice é válido
         if (b != null) { // Verificar se o portDevice é válido
-            throw new InvalidArgumentException("PortDevice is not valid"); // Mensagem de erro
+            throw new InvalidArgumentException("PortDevice is already in use"); // Mensagem de erro
         } else {
+
             t.forceSetPort(portDevice, this); // Chamar o método forceSetConnectedDevice do AbsDeviceEnd para atribuir este device
         }
         this.forceSetPort(port, device); // Adicionar o device ao port
+    }
+
+    public void connectDevice(int port, AbsDevice device, int portDevice) throws InvalidArgumentException {
+        this.setPort(port, device, portDevice);
     }
 
     /**
