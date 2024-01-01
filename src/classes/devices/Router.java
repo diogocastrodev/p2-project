@@ -3,7 +3,7 @@ package classes.devices;
 import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
-import classes.protocols.DHCP;
+import classes.protocols.DHCPDist;
 
 // Router'll be considered a switch but with different way to process
 public class Router extends Switch {
@@ -19,7 +19,7 @@ public class Router extends Switch {
     private String username;
     private String passwordAdmin;
 
-    private DHCP dhcp;
+    private DHCPDist dhcpDist;
 
     public Router(Mac mac, int portCount) throws InvalidArgumentException  {
         super(mac, portCount);

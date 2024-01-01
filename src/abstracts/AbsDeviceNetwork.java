@@ -1,9 +1,8 @@
 package abstracts;
 
-import abstracts.AbsDevice;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
-import classes.protocols.DHCP;
+import classes.protocols.DHCPDist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
     /**
      * DHCP Configuration
      */
-    private DHCP dhcp;
+    private DHCPDist dhcpDist;
     /**
      * Amount of ports
      */
@@ -53,16 +52,16 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
      * Get the DHCP configuration
      * @return DHCP configuration
      */
-    public DHCP getDhcp() {
-        return dhcp;
+    public DHCPDist getDhcp() {
+        return dhcpDist;
     }
 
     /**
      * Set the DHCP configuration
-     * @param dhcp
+     * @param dhcpDist
      */
-    public void setDhcp(DHCP dhcp) {
-        this.dhcp = dhcp;
+    public void setDhcp(DHCPDist dhcpDist) {
+        this.dhcpDist = dhcpDist;
     }
 
     /**

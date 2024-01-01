@@ -1,19 +1,20 @@
 package abstracts;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Cache class to store data and be able to access it from anywhere.
+ * @param <E> - The type of the cache.
+ * @param <V> - The type of the value.
  */
-public abstract class Cache<E,V> {
+public abstract class MapCache<E,V> {
 
     /**
      * HashMap to store the cache.
      */
     private Map<E, V> cache;
 
-    public Cache(Map<E,V> cache) {
+    public MapCache(Map<E,V> cache) {
         this.cache = cache;
     }
 
