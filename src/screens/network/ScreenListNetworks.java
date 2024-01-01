@@ -31,7 +31,7 @@ public class ScreenListNetworks extends AbsScreen {
             case 0:
                     break;
             default:
-                System.out.println(" Opção inválida");
+                throw new InvalidOptionException();
         }
 
     }
