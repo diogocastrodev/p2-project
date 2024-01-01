@@ -21,7 +21,7 @@ public class ScreenListNetworks extends AbsScreen {
 
     @Override
     public void handleOption(int option) {
-        switch(option):
+        switch(option) {
             case 1:
                     break;
             case 2:
@@ -30,7 +30,7 @@ public class ScreenListNetworks extends AbsScreen {
                     break;
             case 0:
                     break;
-        
+        }
 
     }
 
