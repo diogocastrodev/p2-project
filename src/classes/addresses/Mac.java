@@ -78,6 +78,22 @@ public class Mac {
     }
 
     /**
+     * Compare Mac Address
+     * @param mac Mac Address
+     */
+    public boolean equals(Mac mac) {
+        return this.getMac().equals(mac.getMac());
+    }
+
+    /**
+     * Compare Mac Address
+     * @param mac Mac Address
+     */
+    public boolean equals(String mac) {
+        return this.getMac().equals(mac);
+    }
+
+    /**
      * Mac Address
      * @return String Mac Address
      */

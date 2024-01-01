@@ -20,7 +20,6 @@ public class MacCache extends SetCache<String> {
     /**
      * Put a value in the cache.
      * @param key - The key to store the value. (Convert Mac to String)
-     * @param value - The value to store.
      */
     public void put(Mac key) {
         super.add(key.getMac());

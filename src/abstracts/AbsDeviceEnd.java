@@ -3,6 +3,7 @@ package abstracts;
 import abstracts.AbsDevice;
 import classes.addresses.IP;
 import classes.addresses.Mac;
+import classes.exceptions.InvalidArgumentException;
 import enums.Connection;
 
 /**
@@ -37,7 +38,7 @@ public abstract class AbsDeviceEnd extends AbsDevice {
      */
     public AbsDeviceEnd(IP ip, Mac mac) {
         super(mac);
-        this.connection = connection;
+        this.setConnection(Connection.ETHERNET);
     }
     /**************************************************************************
      * Getters and Setters
@@ -66,12 +67,37 @@ public abstract class AbsDeviceEnd extends AbsDevice {
         return connectedDevice;
     }
 
+    public void forceSetConnectedDevice(AbsDevice connectedDevice) {
+        this.connectedDevice = connectedDevice;
+    }
+
     /**
-     * Set the device connected to this device.
+     * Connection to an END device.
      * @param connectedDevice Device connected to this device.
      */
-    public void setConnectedDevice(AbsDevice connectedDevice) {
-        // TODO: Check if the device is already connected to another device.
+    public void setConnectedDevice(AbsDevice connectedDevice) throws InvalidArgumentException {
+        if (connectedDevice == null) {
+            throw new InvalidArgumentException("Device is not valid.");
+        }
+        AbsDeviceEnd t = ((AbsDeviceEnd) connectedDevice);
+        if (t.getConnectedDevice() != null) {
+            throw new InvalidArgumentException("Device is already connected to another device.");
+        } else {
+            t.forceSetConnectedDevice(this);
+        }
+        this.forceSetConnectedDevice(connectedDevice);
+
+    }
+    /**
+     * Connection to a Network device.
+     */
+    public void setConnectedDevice(AbsDevice connectedDevice, int port) throws InvalidArgumentException {
+        if (connectedDevice == null) {
+            throw new InvalidArgumentException("Device is not valid.");
+        }
+        AbsDeviceNetwork t = ((AbsDeviceNetwork) connectedDevice);
+        t.setPort(port, this);
+        this.forceSetConnectedDevice(connectedDevice);
     }
 
     /**

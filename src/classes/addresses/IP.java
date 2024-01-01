@@ -94,6 +94,22 @@ public class IP {
     }
 
     /**
+     * Compare two IPs
+     * @param ip IP
+     */
+    public boolean equals(IP ip) {
+        return this.getIP().equals(ip.getIP());
+    }
+
+    /**
+     * Compare two IPs
+     * @param ip IP
+     */
+    public boolean equals(String ip) {
+        return this.getIP().equals(ip);
+    }
+
+    /**
      *  IP to String
      * @return String IP
      */
