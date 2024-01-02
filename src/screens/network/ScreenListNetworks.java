@@ -13,11 +13,26 @@ public class ScreenListNetworks extends AbsScreen {
 
     @Override
     public void drawMenu() {
-        System.out.println("");
+        System.out.println("1 - Criar um dispostivo");
+        System.out.println("2 - Listar dispostivos");
+        System.out.println("3 - Aceder a um dispostivo");
+        System.out.println("0 - Sair"); 
     }
 
     @Override
     public void handleOption(int option) {
+        switch(option) {
+            case 1:
+                    break;
+            case 2:
+                    break;
+            case 3:
+                    break;
+            case 0:
+                    break;
+            default:
+                throw new InvalidOptionException();
+        }
 
     }
 
