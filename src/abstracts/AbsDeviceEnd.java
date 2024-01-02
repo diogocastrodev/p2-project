@@ -100,4 +100,14 @@ public abstract class AbsDeviceEnd extends AbsDevice {
      * Methods
      **************************************************************************/
 
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "ip=" + this.getIP() + ", " +
+                "mac=" + this.getMac() + ", " +
+                "status=" + this.getStatus() + ", " +
+                "connection=" + this.getConnection() + ", " +
+                "connectedDevice=" + this.getConnectedDevice() + '}';
+    }
 }

@@ -76,4 +76,59 @@ public class DHCPDist {
         this.ipDHCP = ipDHCP;
     }
 
+    public DHCPType getType() {
+        return type;
+    }
+
+    public void setType(DHCPType type) {
+        this.type = type;
+    }
+
+    public IP getIpDHCP() {
+        return ipDHCP;
+    }
+
+    public void setIpDHCP(IP ipDHCP) {
+        this.ipDHCP = ipDHCP;
+    }
+
+    public IP getInitialIP() {
+        return initialIP;
+    }
+
+    public void setInitialIP(IP initialIP) {
+        this.initialIP = initialIP;
+    }
+
+    public IP getFinalIP() {
+        return finalIP;
+    }
+
+    public void setFinalIP(IP finalIP) {
+        this.finalIP = finalIP;
+    }
+
+    public IP getSubnetMask() {
+        return subnetMask;
+    }
+
+    public void setSubnetMask(IP subnetMask) {
+        this.subnetMask = subnetMask;
+    }
+
+    public IP getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(IP gateway) {
+        this.gateway = gateway;
+    }
+
+    public IP getDns() {
+        return dns;
+    }
+
+    public void setDns(IP dns) {
+        this.dns = dns;
+    }
 }
