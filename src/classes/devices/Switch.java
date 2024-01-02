@@ -19,8 +19,8 @@ public class Switch extends AbsDeviceNetwork {
     }
 
     @Override
-    public void sendPacket(Packet packet) {
-
+    public Packet sendPacket(Packet packet) {
+        return null;
     }
 
     @Override

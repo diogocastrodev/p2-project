@@ -98,8 +98,8 @@ public class Device extends AbsDeviceEnd {
     }
 
     @Override
-    public void sendPacket(Packet packet) {
-
+    public Packet sendPacket(Packet packet) {
+        return null;
     }
 
     @Override

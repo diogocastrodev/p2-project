@@ -110,9 +110,10 @@ public abstract class AbsDevice {
 
     /**
      * Send a packet to the device
-     * @param packet
+     * @param packet Packet to be sent
+     * @return Packet to be returned
      */
-    public abstract void sendPacket(Packet packet);
+    public abstract Packet sendPacket(Packet packet);
 
     /**
      * Process a packet (send to correct device or process the packet)

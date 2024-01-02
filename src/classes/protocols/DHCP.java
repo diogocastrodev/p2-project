@@ -3,7 +3,7 @@ package classes.protocols;
 import classes.addresses.IP;
 import classes.addresses.Mac;
 
-public class DHCP {
+public class DHCP extends IPProtocol implements Protocol {
     private int op;
     private int htype;
     private int hlen;
@@ -19,4 +19,9 @@ public class DHCP {
     private String serverName;
     private String bootFileName;
     private Object options;
+
+    private void setOp(int op) {
+
+        this.op = op;
+    }
 }

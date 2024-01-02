@@ -7,7 +7,7 @@ import classes.protocols.tcp.TCPHeadersFlags;
 /**
  *
  */
-public class TCP {
+public class TCP extends IPProtocol implements Protocol {
     private int sourcePort;
     private int destinationPort;
     private int sequenceNumber;
