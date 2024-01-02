@@ -123,4 +123,12 @@ public abstract class AbsDevice {
     public abstract Packet processPacket(Packet packet);
 
 
+    @Override
+    public String toString() {
+        return "AbsDevice{" +
+                "status=" + status +
+                ", ip=" + ip +
+                ", mac=" + mac +
+                '}';
+    }
 }

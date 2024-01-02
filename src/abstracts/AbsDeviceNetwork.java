@@ -181,4 +181,12 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
     /**************************************************************************
      * Methods
      **************************************************************************/
+    @Override
+    public String toString() {
+        return "AbsDeviceNetwork{" +
+                "dhcpDist=" + dhcpDist +
+                ", portsAmount=" + portsAmount +
+                ", ports=" + ports +
+                '}';
+    }
 }
