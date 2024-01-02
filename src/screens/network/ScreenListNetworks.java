@@ -20,7 +20,7 @@ public class ScreenListNetworks extends AbsScreen {
     }
 
     @Override
-    public void handleOption(int option) {
+    public void handleOption(int option) throws InvalidOptionException {
         switch(option) {
             case 1:
                     break;
