@@ -312,6 +312,10 @@ public class TCP extends IPProtocol implements Protocol {
         this.data = data;
     }
 
+    /**
+     * String representation of the object
+     * @return String representation of the object
+     */
     @Override
     public String toString() {
         return "TCP{" +
