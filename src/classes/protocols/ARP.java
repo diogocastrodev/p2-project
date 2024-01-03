@@ -206,4 +206,22 @@ public class ARP implements Protocol {
     public void setTargetIP(IP targetIP) {
         this.targetIP = targetIP;
     }
+
+    /**
+     * String representation of the object
+     * @return String representation of the object
+     */
+    @Override
+    public String toString() {
+        return "ARP{" +
+                "hardwareType=" + hardwareType + ", " +
+                "protocolType=" + protocolType + ", " +
+                "HLEN=" + HLEN + ", " +
+                "PLEN=" + PLEN + ", " +
+                "operation=" + operation + ", " +
+                "sourceMac=" + sourceMac + ", " +
+                "sourceIP=" + sourceIP + ", " +
+                "targetMac=" + targetMac + ", " +
+                "targetIP=" + targetIP + '}';
+    }
 }

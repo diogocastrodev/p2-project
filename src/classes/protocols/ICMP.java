@@ -123,4 +123,19 @@ public class ICMP extends IPProtocol implements Protocol {
     public boolean verifyChecksum(String checksum) {
         return this.checksum.equals(checksum);
     }
+
+    /**
+     * String representation of the object
+     * @return String representation of the object
+     */
+    @Override
+    public String toString() {
+        return "ICMP{" +
+                "type=" + type +
+                ", code=" + code +
+                ", checksum='" + checksum + '\'' +
+                ", identifier=" + identifier +
+                ", sequenceNumber=" + sequenceNumber +
+                '}';
+    }
 }

@@ -331,4 +331,28 @@ public class DHCP extends IPProtocol implements Protocol {
     public void setOptions(Object options) {
         this.options = options;
     }
+
+    /**
+     * String representation of the object
+     * @return String representation of the object
+     */
+    @Override
+    public String toString() {
+        return "DHCP{" +
+                "op=" + op + ", " +
+                "htype=" + htype + ", " +
+                "hlen=" + hlen + ", " +
+                "hops=" + hops + ", " +
+                "transactionID=" + transactionID + ", " +
+                "seconds=" + seconds + ", " +
+                "flags=" + flags + ", " +
+                "clientIP=" + clientIP + ", " +
+                "yourIP=" + yourIP + ", " +
+                "serverIP=" + serverIP + ", " +
+                "relayIP=" + relayIP + ", " +
+                "clientMac=" + clientMac + ", " +
+                "serverName=" + serverName + ", " +
+                "bootFileName=" + bootFileName + ", " +
+                "options=" + options + '}';
+    }
 }
