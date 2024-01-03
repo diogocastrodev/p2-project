@@ -1,5 +1,6 @@
 package classes.protocols;
 
+import classes.addresses.IP;
 import classes.exceptions.InvalidArgumentException;
 import classes.protocols.tcp.ChecksumTCP;
 import classes.protocols.tcp.TCPHeadersFlags;
@@ -73,7 +74,8 @@ public class TCP extends IPProtocol implements Protocol {
      * @param data
      * @throws InvalidArgumentException
      */
-    public TCP(int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, int options, Object data) throws InvalidArgumentException {
+    public TCP(IP srcIP, IP distIP, int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, int options, Object data) throws InvalidArgumentException {
+        super(6, srcIP, distIP, data);
         this.sourcePort = checkForPositives(sourcePort);
         this.destinationPort = checkForPositives(destinationPort);
         this.sequenceNumber = sequenceNumber;
@@ -103,8 +105,8 @@ public class TCP extends IPProtocol implements Protocol {
      * @param data
      * @throws InvalidArgumentException
      */
-    public TCP(int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, Object data) throws InvalidArgumentException {
-        this(sourcePort, destinationPort, sequenceNumber, acknowledgementNumber, dataOffset, reserved, flags, window, checksum, urgentPointer, 0, data);
+    public TCP(IP srcIP, IP distIP,int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, Object data) throws InvalidArgumentException {
+        this(srcIP, distIP, sourcePort, destinationPort, sequenceNumber, acknowledgementNumber, dataOffset, reserved, flags, window, checksum, urgentPointer, 0, data);
     }
 
     /**

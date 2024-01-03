@@ -1,7 +1,19 @@
 package classes.dhcp;
 
+import abstracts.AbsDeviceNetwork;
 import classes.addresses.IP;
+import classes.addresses.SubnetMask;
+import classes.exceptions.InvalidArgumentException;
+import classes.packages.Packet;
+import classes.protocols.DHCP;
+import classes.protocols.ICMP;
+import classes.protocols.Protocol;
 import enums.DHCPType;
+import enums.Operation;
+import enums.Protocols;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class DHCPDist {
 
@@ -25,7 +37,7 @@ public class DHCPDist {
     /**
      * SERVER: Subnet Mask
      */
-    private IP subnetMask;
+    private SubnetMask subnetMask;
     /**
      * SERVER: Gateway
      */
@@ -35,6 +47,8 @@ public class DHCPDist {
      */
     private IP dns;
 
+    private Set<IP> ipsGiven;
+
     /**
      * DHCP Server with DNS
      * @param initialIP Initial IP
@@ -43,13 +57,14 @@ public class DHCPDist {
      * @param gateway Gateway
      * @param dns DNS
      */
-    public DHCPDist(IP initialIP, IP finalIP, IP subnetMask, IP gateway, IP dns) {
-        this.type = DHCPType.Server;
-        this.initialIP = initialIP;
-        this.finalIP = finalIP;
-        this.subnetMask = subnetMask;
-        this.gateway = gateway;
-        this.dns = dns;
+    public DHCPDist(IP initialIP, IP finalIP, SubnetMask subnetMask, IP gateway, IP dns) throws InvalidArgumentException {
+        this.setType(DHCPType.Server);
+        this.setInitialIP(initialIP);
+        this.setFinalIP(finalIP);
+        this.setSubnetMask(subnetMask);
+        this.setGateway(gateway);
+        this.setDns(dns);
+        this.ipsGiven = new HashSet<>();
     }
 
     /**
@@ -59,12 +74,13 @@ public class DHCPDist {
      * @param subnetMask Subnet Mask
      * @param gateway Gateway
      */
-    public DHCPDist(IP initialIP, IP finalIP, IP subnetMask, IP gateway) {
-        this.type = DHCPType.Server;
-        this.initialIP = initialIP;
-        this.finalIP = finalIP;
-        this.subnetMask = subnetMask;
-        this.gateway = gateway;
+    public DHCPDist(IP initialIP, IP finalIP, SubnetMask subnetMask, IP gateway) throws InvalidArgumentException {
+        this.setType(DHCPType.Server);
+        this.setInitialIP(initialIP);
+        this.setFinalIP(finalIP);
+        this.setSubnetMask(subnetMask);
+        this.setGateway(gateway);
+        this.ipsGiven = new HashSet<>();
     }
 
     /**
@@ -72,8 +88,8 @@ public class DHCPDist {
      * @param ipDHCP IP of DHCP Server
      */
     public DHCPDist(IP ipDHCP) {
-        this.type = DHCPType.Relay;
-        this.ipDHCP = ipDHCP;
+        this.setType(DHCPType.Relay);
+        this.setIpDHCP(ipDHCP);
     }
 
     public DHCPType getType() {
@@ -104,15 +120,26 @@ public class DHCPDist {
         return finalIP;
     }
 
-    public void setFinalIP(IP finalIP) {
+    public void setFinalIP(IP finalIP) throws InvalidArgumentException {
+        // Verficar se finalIP é maior que initialIP
+        int[] ipInitialParts = this.getInitialIP().parseIPInteger();
+        int[] ipFinalParts = finalIP.parseIPInteger();
+        if (finalIP.equals(this.getInitialIP())) {
+            throw new InvalidArgumentException("IP final deve ser maior que IP inicial");
+        }
+        for (int i = 0; i < ipInitialParts.length; i++) {
+            if (ipFinalParts[i] < ipInitialParts[i]) {
+                throw new InvalidArgumentException("IP final deve ser maior que IP inicial");
+            }
+        }
         this.finalIP = finalIP;
     }
 
-    public IP getSubnetMask() {
+    public SubnetMask getSubnetMask() {
         return subnetMask;
     }
 
-    public void setSubnetMask(IP subnetMask) {
+    public void setSubnetMask(SubnetMask subnetMask) {
         this.subnetMask = subnetMask;
     }
 
@@ -130,6 +157,42 @@ public class DHCPDist {
 
     public void setDns(IP dns) {
         this.dns = dns;
+    }
+
+    public Packet processServer(AbsDeviceNetwork device, Packet packet) throws InvalidArgumentException {
+        if (device == null || packet == null) {
+            throw new InvalidArgumentException("Argumentos inválidos");
+        }
+        if (!packet.getProtocolType().equals(Protocols.DHCP)) {
+            throw new InvalidArgumentException("Protocolo inválido");
+        }
+        if (this.getType().equals(DHCPType.Relay)) {
+            throw new InvalidArgumentException("Este dispositivo não é um servidor DHCP");
+        }
+        DHCP request = packet.getDHCP();
+        DHCP answer = new DHCP(Operation.Reply, request.getClientMac(), device.getIP());
+        answer.setServerName("Não sei, mas tem isto: " + device.getMac());
+
+
+        IP ipGiven = null;
+        while (true) {
+            ipGiven = this.getSubnetMask().generateRandomIPInsideMask(this.getInitialIP(), this.getFinalIP());
+            if (!this.ipsGiven.contains(ipGiven)) {
+                int seqNumber = Math.abs((int) (Math.random() * 1000));
+                ICMP icmp = new ICMP(device.getIP(), ipGiven, "Check IP Existence", 1, seqNumber);
+                Packet p = new Packet(icmp, Protocols.ICMP);
+                Packet ans = device.sendPacket(p);
+                if (ans == null) {
+                    // IP não existe
+                    this.ipsGiven.add(ipGiven);
+                    break;
+                }
+            }
+        }
+
+        answer.setClientIP(ipGiven);
+
+        return new Packet(answer, Protocols.DHCP);
     }
 
 }

@@ -62,6 +62,18 @@ public class IPProtocol {
      */
     private Object data;
 
+    /**
+     * Constructor
+     * @param sourceAddress Source Address
+     * @param destinationAddress Destination Address
+     * @param data Data
+     */
+    public IPProtocol(int protocol, IP sourceAddress, IP destinationAddress, Object data) {
+        this.setProtocol(protocol);
+        this.setSourceAddress(sourceAddress);
+        this.setDestinationAddress(destinationAddress);
+        this.setData(data);
+    }
 
     /**
      * Version

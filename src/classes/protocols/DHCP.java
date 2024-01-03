@@ -76,6 +76,7 @@ public class DHCP extends IPProtocol implements Protocol {
      * @throws InvalidArgumentException
      */
     public DHCP(Operation op, Mac clientMac, IP serverIP) throws InvalidArgumentException {
+        super(17, new IP(), new IP("255.255.255.255"), new Object());
         this.setOp(op);
         this.setServerIP(serverIP);
         this.setClientMac(clientMac);
@@ -88,6 +89,7 @@ public class DHCP extends IPProtocol implements Protocol {
      * @throws InvalidArgumentException
      */
     public DHCP(Operation op, Mac clientMac) throws InvalidArgumentException {
+        super(17, new IP(), new IP("255.255.255.255"), new Object());
         this.setOp(op);
         this.setClientMac(clientMac);
     }

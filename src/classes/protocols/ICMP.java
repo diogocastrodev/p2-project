@@ -1,5 +1,7 @@
 package classes.protocols;
 
+import classes.addresses.IP;
+
 public class ICMP extends IPProtocol implements Protocol {
     /**
      * Type
@@ -30,7 +32,8 @@ public class ICMP extends IPProtocol implements Protocol {
      * @param type Type of ICMP
      * @param sequenceNumber Sequence Number
      */
-    public ICMP(int type, int sequenceNumber) {
+    public ICMP(IP sourceAddress, IP destinationAddress, Object data, int type, int sequenceNumber) {
+        super(1, sourceAddress, destinationAddress, data);
         this.type = type;
         this.sequenceNumber = sequenceNumber;
     }
