@@ -20,6 +20,14 @@ public class IP {
     }
 
     /**
+     * IP Constructor
+     * IP = 0.0.0.0
+     */
+    public IP() {
+        this.ip = "0.0.0.0";
+    }
+
+    /**
      * Get IP
      * @return String IP
      */

@@ -11,24 +11,116 @@ public class ICMP extends IPProtocol implements Protocol {
     /**
      * Code
      */
-    private int code = 0;
+    private int code = 0x0;
     /**
      * Checksum
      */
-    private String checksum;
+    private String checksum = "";
     /**
      * Identifier
      */
-    private int identifier;
+    private int identifier = 0x0002;
     /**
      * Sequence Number
      */
     private int sequenceNumber;
 
-    public ICMP(int type, String checksum, int identifier, int sequenceNumber) {
+    /**
+     * Constructor
+     * @param type Type of ICMP
+     * @param sequenceNumber Sequence Number
+     */
+    public ICMP(int type, int sequenceNumber) {
         this.type = type;
-        this.checksum = checksum;
-        this.identifier = identifier;
         this.sequenceNumber = sequenceNumber;
+    }
+
+    /**
+     * Type
+     * @return Type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * Type
+     * @param type Type
+     */
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    /**
+     * Code
+     * @return Code
+     */
+    public int getCode() {
+        return code;
+    }
+
+    /**
+     * Code
+     * @param code Code
+     */
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    /**
+     * Checksum
+     * @return Checksum
+     */
+    public String getChecksum() {
+        return checksum;
+    }
+
+    /**
+     * Checksum
+     * @param checksum Checksum
+     */
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
+    }
+
+    /**
+     * Identifier
+     * @return Identifier
+     */
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * Identifier
+     * @param identifier Identifier
+     */
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
+
+    /**
+     * Sequence Number
+     * @return Sequence Number
+     */
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    /**
+     * Sequence Number
+     * @param sequenceNumber Sequence Number
+     */
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    /**
+     * Verify Checksum
+     * @param checksum Checksum
+     * @return Whether the checksum is valid
+     */
+    public boolean verifyChecksum(String checksum) {
+        return this.checksum.equals(checksum);
     }
 }

@@ -47,4 +47,98 @@ public class TCP extends IPProtocol implements Protocol {
         }
         return value;
     }
+
+    public int getSourcePort() {
+        return sourcePort;
+    }
+
+    public void setSourcePort(int sourcePort) {
+        this.sourcePort = sourcePort;
+    }
+
+    public int getDestinationPort() {
+        return destinationPort;
+    }
+
+    public void setDestinationPort(int destinationPort) {
+        this.destinationPort = destinationPort;
+    }
+
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public int getAcknowledgementNumber() {
+        return acknowledgementNumber;
+    }
+
+    public void setAcknowledgementNumber(int acknowledgementNumber) {
+        this.acknowledgementNumber = acknowledgementNumber;
+    }
+
+    public int getDataOffset() {
+        return dataOffset;
+    }
+
+    public void setDataOffset(int dataOffset) {
+        this.dataOffset = dataOffset;
+    }
+
+    public int getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(int reserved) {
+        this.reserved = reserved;
+    }
+
+    public void setFlags(TCPHeadersFlags flags) {
+        this.flags = flags;
+    }
+
+    public int getWindow() {
+        return window;
+    }
+
+    public void setWindow(int window) {
+        this.window = window;
+    }
+
+    public ChecksumTCP getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(ChecksumTCP checksum) {
+        this.checksum = checksum;
+    }
+
+    public int getUrgentPointer() {
+        return urgentPointer;
+    }
+
+    public void setUrgentPointer(int urgentPointer) {
+        this.urgentPointer = urgentPointer;
+    }
+
+    public int getOptions() {
+        return options;
+    }
+
+    public void setOptions(int options) {
+        this.options = options;
+    }
+
+    @Override
+    public Object getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Object data) {
+        this.data = data;
+    }
 }

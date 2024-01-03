@@ -1,11 +1,11 @@
 package enums;
 
-public enum ARPOperation {
+public enum Operation {
     Request(1),
     Reply(2),
     ;
     private int Identifier;
-    ARPOperation(int Identifier) {
+    Operation(int Identifier) {
         this.Identifier = Identifier;
     }
 }
