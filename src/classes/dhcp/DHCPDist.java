@@ -4,6 +4,7 @@ import abstracts.AbsDeviceNetwork;
 import classes.addresses.IP;
 import classes.addresses.SubnetMask;
 import classes.exceptions.InvalidArgumentException;
+import classes.logger.Logger;
 import classes.packages.Packet;
 import classes.protocols.DHCP;
 import classes.protocols.ICMP;
@@ -177,6 +178,7 @@ public class DHCPDist {
         IP ipGiven = null;
         while (true) {
             ipGiven = this.getSubnetMask().generateRandomIPInsideMask(this.getInitialIP(), this.getFinalIP());
+            new Logger().addLog(Protocols.DHCP, "Generated IP: " + ipGiven.toString());
             if (!this.ipsGiven.contains(ipGiven)) {
                 int seqNumber = Math.abs((int) (Math.random() * 1000));
                 ICMP icmp = new ICMP(device.getIP(), ipGiven, "Check IP Existence", 1, seqNumber);

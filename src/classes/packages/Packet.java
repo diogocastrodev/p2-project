@@ -1,6 +1,7 @@
 package classes.packages;
 
 import classes.addresses.IP;
+import classes.logger.Logger;
 import classes.protocols.*;
 import enums.Protocols;
 
@@ -11,6 +12,7 @@ public class Packet {
     public Packet(Protocol protocol, Protocols protocolType) {
         this.setProtocol(protocol);
         this.setProtocolType(protocolType);
+        new Logger().addLog(protocolType, "New packet created");
     }
 
     public Protocol getProtocol() {

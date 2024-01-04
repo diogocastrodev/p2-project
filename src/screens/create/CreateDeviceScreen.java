@@ -1,21 +1,16 @@
-package screens.network;
+package screens.create;
 
 import abstracts.AbsScreen;
 import classes.exceptions.InvalidOptionException;
 
-public class ScreenListNetworks extends AbsScreen {
-
-    /**
-     * Constructor for AbsScreen
-     */
-    public ScreenListNetworks() throws InvalidOptionException {
-    }
+public class CreateDeviceScreen extends AbsScreen {
 
     @Override
     public void drawMenu() {
-        System.out.println("1 - Criar um dispostivo");
-        System.out.println("2 - Listar dispostivos");
-        System.out.println("3 - Aceder a um dispostivo");
+        System.out.println("1 - Criar um Dispositivo de fim (Computador)");
+        System.out.println("2 - Router");
+        System.out.println("3 - Switch");
+        System.out.println("4 - Hub");
         System.out.println("0 - Sair"); 
     }
 
@@ -27,6 +22,8 @@ public class ScreenListNetworks extends AbsScreen {
             case 2:
                     break;
             case 3:
+                    break;
+            case 4:
                     break;
             case 0:
                     break;

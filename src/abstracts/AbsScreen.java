@@ -54,7 +54,7 @@ public abstract class AbsScreen {
      * @param status the status to convert
      * @return the emoji of the status
      */
-    public static String convertStatus (Status status) {
+    public String convertStatus (Status status) {
         switch (status) {
             case UP:
                 return "🟢";
@@ -69,8 +69,17 @@ public abstract class AbsScreen {
     /**
      * Clears the screen.
      */
-    public static void clearScreen() {
+    public void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    /**
+     * Press ENTER to continue.
+     */
+    public void pressEnterToContinue() {
+        System.out.println("Pressione ENTER para continuar...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 }
