@@ -54,4 +54,9 @@ public class Hub extends AbsDeviceNetwork {
         }
         return this.sendPacket(packet, this); // Send the packet to all ports
     }
+
+    @Override
+    public String toString() {
+        return super.toString().replace("AbsDeviceNetwork", "Hub");
+    }
 }

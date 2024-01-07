@@ -98,14 +98,7 @@ public class Device extends AbsDeviceEnd {
 
     @Override
     public String toString() {
-        String name = this.getName() != null ? this.getName() : "unknown"; // Se o nome for null, então é "unknown"
-        String connection = this.getConnection() != null ? this.getConnection().name() : "unknown"; // Se a conexão for null, então é "unknown"
-        return "{" +
-                "name='" + name + '\'' +
-                ", connection='" + connection + '\'' +
-                ", ip='" + this.getIP() + '\'' +
-                ", mac='" + super.getMac() + '\'' +
-                '}';
+        return super.toString().replace("AbsDeviceEnd", "Device");
     }
 
 

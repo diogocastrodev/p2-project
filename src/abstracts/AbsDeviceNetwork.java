@@ -183,9 +183,23 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
      **************************************************************************/
     @Override
     public String toString() {
+
+        String ports = "";
+
+        for (int i = 1; i <= this.getPortsAmount(); i++) {
+            AbsDevice device = this.ports.get(i);
+            if (device != null) {
+                ports += "{" + i + "='" + device.getMac() + "'}";
+            } else {
+                ports += "{" + i + "='null'}";
+            }
+        }
+
         return "AbsDeviceNetwork{" +
                 "dhcpDist=" + dhcpDist +
-                ", portsAmount=" + portsAmount +
+                ", mac='" + super.getMac() + '\'' +
+                ", ip='" + super.getIP() + '\'' +
+                ", portsAmount='" + portsAmount + '\'' +
                 ", ports=" + ports +
                 '}';
     }

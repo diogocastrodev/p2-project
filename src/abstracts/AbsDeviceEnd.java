@@ -16,6 +16,10 @@ public abstract class AbsDeviceEnd extends AbsDevice {
      * Variables
      **************************************************************************/
     /**
+     * Name
+     */
+    private String name;
+    /**
      * The connection type of the device.
      */
     private Connection connection;
@@ -39,6 +43,22 @@ public abstract class AbsDeviceEnd extends AbsDevice {
     /**************************************************************************
      * Getters and Setters
      **************************************************************************/
+    /**
+     * Get the name of the device.
+     * @return Name of the device.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name of the device.
+     * @param name Name of the device.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * Get the connection type of the device.
      * @return Connection type of the device.
@@ -103,10 +123,11 @@ public abstract class AbsDeviceEnd extends AbsDevice {
     @Override
     public String toString() {
         return "AbsDeviceEnd{" +
-                "ip=" + this.getIP() + ", " +
-                "mac=" + this.getMac() + ", " +
-                "status=" + this.getStatus() + ", " +
-                "connection=" + this.getConnection() + ", " +
-                "connectedDevice=" + this.getConnectedDevice() + '}';
+                "name='" + this.getName() + "\', " +
+                "ip='" + this.getIP() + "', " +
+                "mac='" + this.getMac() + "', " +
+                "status='" + this.getStatus() + "', " +
+                "connection='" + this.getConnection() + "', " +
+                "connectedDevice='" + this.getConnectedDevice().getMac() + "'}";
     }
 }

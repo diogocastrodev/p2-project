@@ -1,3 +1,4 @@
+import classes.data.DataManager;
 import classes.devices.Device;
 import classes.devices.Switch;
 import classes.exceptions.InvalidArgumentException;
@@ -11,14 +12,14 @@ import test_tools.TestTools;
 public class Tests {
     public Tests() throws InvalidArgumentException {
         TestTools testTools = new TestTools();
-        Device d1 = new Device(testTools.generateIP(), testTools.generateMac());
-        Device d2 = new Device(testTools.generateIP(), testTools.generateMac());
+        Device d1 = new Device(testTools.generateIP(192,168,1), testTools.generateMac());
+        Device d2 = new Device(testTools.generateIP(192,168,1), testTools.generateMac());
 
-        Device d3 = new Device(testTools.generateIP(), testTools.generateMac());
-        Device d4 = new Device(testTools.generateIP(), testTools.generateMac());
-        Device d5 = new Device(testTools.generateIP(), testTools.generateMac());
+        Device d3 = new Device(testTools.generateIP(192,168,1), testTools.generateMac());
+        Device d4 = new Device(testTools.generateIP(192,168,1), testTools.generateMac());
+        Device d5 = new Device(testTools.generateIP(192,168,1), testTools.generateMac());
 
-        Switch s1 = new Switch(testTools.generateMac(), testTools.generateIP(), 5);
+        Switch s1 = new Switch(testTools.generateMac(), testTools.generateIP(192,168,1), 5);
 
 
         d1.setConnectedDevice(d2);
@@ -29,5 +30,7 @@ public class Tests {
 
 
         new MainScreen();
+
+        new DataManager().saveDevices();
     }
 }

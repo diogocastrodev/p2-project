@@ -29,4 +29,9 @@ public class Switch extends AbsDeviceNetwork {
     public Packet processPacket(Packet packet, AbsDevice sender) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return super.toString().replace("AbsDeviceNetwork", "Switch");
+    }
 }

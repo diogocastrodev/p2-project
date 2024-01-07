@@ -10,4 +10,12 @@ public class Router extends Switch {
     public Router(Mac mac, IP ip, int portCount) throws InvalidArgumentException  {
         super(mac, ip, portCount);
     }
+
+    @Override
+    public String toString() {
+        if (super.toString().contains("Switch")) {
+            return super.toString().replace("Switch", "Router");
+        }
+        return super.toString().replace("AbsDeviceNetwork", "Router");
+    }
 }
