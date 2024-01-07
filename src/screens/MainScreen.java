@@ -5,6 +5,7 @@ import cache.DevicesCache;
 import classes.exceptions.InvalidOptionException;
 import screens.create.CreateDeviceScreen;
 import screens.list.ListDevicesScreen;
+import screens.logs.LogScreen;
 import screens.select.SelectDeviceScreen;
 
 public class MainScreen extends AbsScreen {
@@ -13,7 +14,7 @@ public class MainScreen extends AbsScreen {
         System.out.println("1. Criar uma novo dispositivo");
         System.out.println("2. Selecionar um dispositivo");
         System.out.println("3. Listar dispositivos");
-        System.out.println("4. Mostrar último log guardado");
+        System.out.println("4. Logs");
         System.out.println("0. Sair");
     }
 
@@ -38,7 +39,7 @@ public class MainScreen extends AbsScreen {
                 new ListDevicesScreen();
                 break;
             case 4:
-                //
+                new LogScreen();
                 break;
             case 0:
                 // System.exit(0); -> This causes error in IntelliJ

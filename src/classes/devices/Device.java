@@ -1,5 +1,6 @@
 package classes.devices;
 
+import abstracts.AbsDevice;
 import abstracts.AbsDeviceEnd;
 import classes.addresses.IP;
 import classes.addresses.Mac;
@@ -86,6 +87,16 @@ public class Device extends AbsDeviceEnd {
     }
 
     @Override
+    public Packet sendPacket(Packet packet, AbsDevice sender) {
+        return null;
+    }
+
+    @Override
+    public Packet processPacket(Packet packet, AbsDevice sender) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         String name = this.getName() != null ? this.getName() : "unknown"; // Se o nome for null, então é "unknown"
         String connection = this.getConnection() != null ? this.getConnection().name() : "unknown"; // Se a conexão for null, então é "unknown"
@@ -97,13 +108,5 @@ public class Device extends AbsDeviceEnd {
                 '}';
     }
 
-    @Override
-    public Packet sendPacket(Packet packet) {
-        return null;
-    }
 
-    @Override
-    public Packet processPacket(Packet packet) {
-        return null;
-    }
 }

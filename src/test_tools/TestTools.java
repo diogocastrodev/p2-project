@@ -1,18 +1,38 @@
 package test_tools;
 
+import classes.addresses.IP;
+import classes.addresses.Mac;
+import classes.exceptions.InvalidArgumentException;
+
 /**
  * Class with tools to execute some tests (Generators, etc)
  */
 public class TestTools {
 
+
     /*-----------------------------------------------------------------------*/
     /*--------------------------------- IP ----------------------------------*/
     /*-----------------------------------------------------------------------*/
+    public IP generateIP() throws InvalidArgumentException {
+        return new IP(generateIPString());
+    }
+
+    public IP generateIP(int v1) throws InvalidArgumentException {
+        return new IP(generateIPString(v1));
+    }
+
+    public IP generateIP(int v1, int v2) throws InvalidArgumentException {
+        return new IP(generateIPString(v1, v2));
+    }
+
+    public IP generateIP(int v1, int v2, int v3) throws InvalidArgumentException {
+        return new IP(generateIPString(v1, v2, v3));
+    }
     /**
      * Generates a random IP address
      * @return IP (***.***.***.***)
      */
-    public String generateIP() {
+    public String generateIPString() {
         String ip = "";
         for (int i = 0; i < 4; i++) {
             String octet = generateOctet();
@@ -32,7 +52,7 @@ public class TestTools {
      * @param v1 First octet
      * @return IP (v1.***.***.***)
      */
-    public String generateIP(int v1) {
+    public String generateIPString(int v1) {
         String ip = String.valueOf(v1) + ".";
 
         for (int i = 0; i < 3; i++) {
@@ -51,7 +71,7 @@ public class TestTools {
      * @param v2 Second octet
      * @return IP (v1.v2.***.***)
      */
-    public String generateIP(int v1, int v2) {
+    public String generateIPString(int v1, int v2) {
         String ip = String.valueOf(v1) + "." + String.valueOf(v2) + ".";
 
         for (int i = 0; i < 2; i++) {
@@ -71,7 +91,7 @@ public class TestTools {
      * @param v3 Third octet
      * @return IP (v1.v2.v3.***)
      */
-    public String generateIP(int v1, int v2, int v3) {
+    public String generateIPString(int v1, int v2, int v3) {
         String ip = String.valueOf(v1) + "." + String.valueOf(v2) + "." + String.valueOf(v3) + ".";
 
         ip += generateOctet();
@@ -92,11 +112,16 @@ public class TestTools {
     /*-----------------------------------------------------------------------*/
     /*-------------------------------- MAC ----------------------------------*/
     /*-----------------------------------------------------------------------*/
+
+    public Mac generateMac() throws InvalidArgumentException {
+        return new Mac(generateMacString());
+    }
+
     /**
      * Generates a random Mac address
      * @return MAC (**:**:**:**:**:**)
      */
-    public String generateMac() {
+    public String generateMacString() {
         String mac = "";
         for (int i = 0; i < 6; i++) {
             mac += generateHexPair();

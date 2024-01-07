@@ -183,7 +183,7 @@ public class DHCPDist {
                 int seqNumber = Math.abs((int) (Math.random() * 1000));
                 ICMP icmp = new ICMP(device.getIP(), ipGiven, "Check IP Existence", 1, seqNumber);
                 Packet p = new Packet(icmp, Protocols.ICMP);
-                Packet ans = device.sendPacket(p);
+                Packet ans = device.sendPacket(p, device);
                 if (ans == null) {
                     // IP não existe
                     this.ipsGiven.add(ipGiven);

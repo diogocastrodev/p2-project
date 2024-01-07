@@ -1,8 +1,11 @@
 package abstracts;
 
+import cache.DevicesCache;
+import cache.MacCache;
 import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.packages.Packet;
+import enums.IPType;
 import enums.Status;
 
 import java.util.HashMap;
@@ -20,6 +23,10 @@ public abstract class AbsDevice {
      * IP address of the device
      */
     private IP ip;
+    /**
+     * IP type of the device
+     */
+    private IPType ipType;
     /**
      * MAC address of the device
      */
@@ -39,8 +46,16 @@ public abstract class AbsDevice {
     public AbsDevice(Mac mac, IP ip) {
         this.setMac(mac); // Set the MAC address
         this.setIP(ip); // Set the IP address
-        this.setStatus(Status.DOWN); // Set the status to DOWN
+        if (ip == null || ip.toString().equals("0.0.0.0")) {
+            this.setIpType(IPType.DYNAMIC);
+        } else {
+            this.setIpType(IPType.STATIC);
+        }
+        this.setStatus(Status.UP); // Set the status to DOWN
         this.arpTable = new HashMap<>(); // Initialize the ARP Table
+
+        new DevicesCache().addDevice(this);
+        new MacCache().add(this.getMac().toString());
     }
 
     /**************************************************************************
@@ -94,6 +109,22 @@ public abstract class AbsDevice {
         this.ip = ip;
     }
 
+    /**
+     * Get Type of the IP address
+     * @return Type of the IP address
+     */
+    public IPType getIpType() {
+        return ipType;
+    }
+
+    /**
+     * Set Type of the IP address
+     * @param ipType
+     */
+    public void setIpType(IPType ipType) {
+        this.ipType = ipType;
+    }
+
     /**************************************************************************
      * Methods
      **************************************************************************/
@@ -113,14 +144,14 @@ public abstract class AbsDevice {
      * @param packet Packet to be sent
      * @return Packet to be returned
      */
-    public abstract Packet sendPacket(Packet packet);
+    public abstract Packet sendPacket(Packet packet, AbsDevice sender);
 
     /**
      * Process a packet (send to correct device or process the packet)
      * @param packet Packet to process
      * @return Packet to send
      */
-    public abstract Packet processPacket(Packet packet);
+    public abstract Packet processPacket(Packet packet, AbsDevice sender);
 
 
     @Override

@@ -1,5 +1,6 @@
 package classes.devices;
 
+import abstracts.AbsDevice;
 import abstracts.AbsDeviceNetwork;
 import classes.addresses.IP;
 import classes.addresses.Mac;
@@ -18,13 +19,14 @@ public class Switch extends AbsDeviceNetwork {
         table = new HashMap<>();
     }
 
+
     @Override
-    public Packet sendPacket(Packet packet) {
+    public Packet sendPacket(Packet packet, AbsDevice sender) {
         return null;
     }
 
     @Override
-    public Packet processPacket(Packet packet) {
+    public Packet processPacket(Packet packet, AbsDevice sender) {
         return null;
     }
 }

@@ -12,9 +12,9 @@ public class SelectDeviceScreen extends AbsScreen {
     @Override
     public void drawMenu() {
         // List all devices
-        Map<Mac, AbsDevice> c = new DevicesCache().getCache();
+        Map<String, AbsDevice> c = new DevicesCache().getCache();
         int i = 1;
-        for (Mac mac : c.keySet()) {
+        for (String mac : c.keySet()) {
             AbsDevice device = c.get(mac);
             System.out.println(i + ". " + super.convertStatus(device.getStatus()) + " " + device.getMac() + " -> " + device.getIP());
             i++;

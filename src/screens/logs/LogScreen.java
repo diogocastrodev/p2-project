@@ -27,14 +27,14 @@ public class LogScreen extends AbsScreen {
                 try {
                     List<String> logs = l.getLastLogLines();
                     if (logs.size() == 0) {
-                        System.out.println("Não existem logs guardados!");
+                        new Exception("Não existem logs guardados!");
                         break;
                     }
                     for (String log : logs) {
                         System.out.println(log);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Não existem logs guardados!");
                 }
                 super.pressEnterToContinue();
                 clearScreen();
@@ -43,7 +43,7 @@ public class LogScreen extends AbsScreen {
                 try {
                     new Logger().openLastLogFile();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Não existem logs guardados!");
                 }
                 break;
             case 3:

@@ -22,11 +22,11 @@ public class Hub extends AbsDeviceNetwork {
      * @return Packet to be returned (last packet)
      */
     @Override
-    public Packet sendPacket(Packet packet) {
+    public Packet sendPacket(Packet packet, AbsDevice sender) {
         Packet a = new Packet(null, null); // Packet to be returned
         for (AbsDevice device : super.getPorts().values()) { // Send the packet to all ports
             new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Redirect to " + device.getIP()); // Log the packet
-            Packet b = device.processPacket(packet); // Process the packet
+            Packet b = device.processPacket(packet, this); // Process the packet
             if (b != null) { // If the packet is not null
                 a = b; // Set the packet to be returned
 
@@ -41,13 +41,17 @@ public class Hub extends AbsDeviceNetwork {
      * @return Packet to send (null if no packet to send)
      */
     @Override
-    public Packet processPacket(Packet packet) {
+    public Packet processPacket(Packet packet, AbsDevice sender) {
         new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Received a packet"); // Log the packet
         if (packet.getProtocolType().equals(Protocols.DHCP)) {
             if(super.getDhcp().getType().equals(DHCPType.Server)) {
-                // TODO: DHCP Server, answer to the packet
+                try {
+                    return super.getDhcp().processServer(this, packet);
+                } catch (InvalidArgumentException e) {
+                    new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Error processing DHCP Server");
+                }
             }
         }
-        return this.sendPacket(packet); // Send the packet to all ports
+        return this.sendPacket(packet, this); // Send the packet to all ports
     }
 }
