@@ -2,7 +2,9 @@ package classes.addresses;
 
 import classes.exceptions.InvalidArgumentException;
 
-public class IP {
+import java.io.Serializable;
+
+public class IP implements Serializable {
     /**
      * IP Address
      */

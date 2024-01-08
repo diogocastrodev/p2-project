@@ -28,15 +28,15 @@ public class TCP extends IPProtocol implements Protocol {
     /**
      * Data offset
      */
-    private int dataOffset;
+    private int dataOffset = 5;
     /**
      * Reserved
      */
-    private int reserved;
+    private int reserved = 0;
     /**
      * Flags
      */
-    private TCPHeadersFlags flags;
+    private TCPHeadersFlags flags = new TCPHeadersFlags(0,0,0,0,0,0,0,0);
     /**
      * Window
      */
@@ -48,65 +48,27 @@ public class TCP extends IPProtocol implements Protocol {
     /**
      * Urgent pointer
      */
-    private int urgentPointer;
+    private int urgentPointer = 0;
     /**
      * Options
      */
-    private int options;
+    private int options = 0;
     /**
      * Data
      */
     private Object data;
 
-    /**
-     * Constructor
-     * @param sourcePort
-     * @param destinationPort
-     * @param sequenceNumber
-     * @param acknowledgementNumber
-     * @param dataOffset
-     * @param reserved
-     * @param flags
-     * @param window
-     * @param checksum
-     * @param urgentPointer
-     * @param options
-     * @param data
-     * @throws InvalidArgumentException
-     */
-    public TCP(IP srcIP, IP distIP, int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, int options, Object data) throws InvalidArgumentException {
-        super(6, srcIP, distIP, data);
-        this.sourcePort = checkForPositives(sourcePort);
-        this.destinationPort = checkForPositives(destinationPort);
-        this.sequenceNumber = sequenceNumber;
-        this.acknowledgementNumber = acknowledgementNumber;
-        this.dataOffset = dataOffset;
-        this.reserved = reserved;
-        this.flags = flags;
-        this.window = window;
-        this.checksum = checksum;
-        this.urgentPointer = urgentPointer;
-        this.options = options;
-        this.data = data;
-    }
-
-    /**
-     * Constructor
-     * @param sourcePort
-     * @param destinationPort
-     * @param sequenceNumber
-     * @param acknowledgementNumber
-     * @param dataOffset
-     * @param reserved
-     * @param flags
-     * @param window
-     * @param checksum
-     * @param urgentPointer
-     * @param data
-     * @throws InvalidArgumentException
-     */
-    public TCP(IP srcIP, IP distIP,int sourcePort, int destinationPort, int sequenceNumber, int acknowledgementNumber, int dataOffset, int reserved, TCPHeadersFlags flags, int window, ChecksumTCP checksum, int urgentPointer, Object data) throws InvalidArgumentException {
-        this(srcIP, distIP, sourcePort, destinationPort, sequenceNumber, acknowledgementNumber, dataOffset, reserved, flags, window, checksum, urgentPointer, 0, data);
+    public TCP (IP sourceAddress, IP destinantionAddress, int sourcePort, int destinationPort, int sequenceNumber, int window, Object data) throws InvalidArgumentException {
+        super(6, sourceAddress, destinantionAddress, data);
+        this.setSourcePort(sourcePort);
+        this.setDestinationPort(destinationPort);
+        // SYN
+        this.setSequenceNumber(sequenceNumber);
+        // ACK = SYN + 1
+        this.setAcknowledgementNumber(sequenceNumber + 1);
+        this.setWindow(window);
+        this.setTCPData(data);
+        this.setChecksum(new ChecksumTCP(super.getSourceAddress(), super.getDestinationAddress(), 0, 0, 0));
     }
 
     /**

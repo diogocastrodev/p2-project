@@ -1,6 +1,8 @@
 package classes.addresses;
 
-public class SubnetMask {
+import java.io.Serializable;
+
+public class SubnetMask implements Serializable {
 
     private IP subnetMask;
 

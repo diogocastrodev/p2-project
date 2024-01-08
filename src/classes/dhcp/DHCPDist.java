@@ -13,10 +13,11 @@ import enums.DHCPType;
 import enums.Operation;
 import enums.Protocols;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DHCPDist {
+public class DHCPDist implements Serializable {
 
     /**
      * DHCP Type

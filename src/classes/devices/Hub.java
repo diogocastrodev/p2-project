@@ -10,7 +10,9 @@ import classes.packages.Packet;
 import enums.DHCPType;
 import enums.Protocols;
 
-public class Hub extends AbsDeviceNetwork {
+import java.io.Serializable;
+
+public class Hub extends AbsDeviceNetwork implements Serializable {
 
     public Hub(Mac mac, IP ip, int portCount ) throws InvalidArgumentException  {
         super(mac, ip, portCount);
@@ -32,7 +34,11 @@ public class Hub extends AbsDeviceNetwork {
 
             }
         }
-        return a; // Return the packet
+        if (a.getProtocol() != null) {
+            return a;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -42,6 +48,7 @@ public class Hub extends AbsDeviceNetwork {
      */
     @Override
     public Packet processPacket(Packet packet, AbsDevice sender) {
+        // TODO: Still have to check if the packet is for this device
         new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Received a packet"); // Log the packet
         if (packet.getProtocolType().equals(Protocols.DHCP)) {
             if(super.getDhcp().getType().equals(DHCPType.Server)) {

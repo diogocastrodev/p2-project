@@ -6,9 +6,17 @@ import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import classes.packages.Packet;
+import classes.protocols.ARP;
+import classes.protocols.DHCP;
+import classes.protocols.ICMP;
+import classes.protocols.TCP;
 import enums.Connection;
+import enums.Operation;
+import enums.Protocols;
 
-public class Device extends AbsDeviceEnd {
+import java.io.Serializable;
+
+public class Device extends AbsDeviceEnd implements Serializable {
 
     /**
      * The name of the device
@@ -88,11 +96,54 @@ public class Device extends AbsDeviceEnd {
 
     @Override
     public Packet sendPacket(Packet packet, AbsDevice sender) {
+        if (this.getConnectedDevice() != null) {
+            // Send the packet to the connected device
+            if (!this.getConnectedDevice().getMac().toString().equals(sender.getMac().toString())) {
+                // The packet didn't come from the connected device
+                // Send the packet to the connected device
+                return this.getConnectedDevice().processPacket(packet, this);
+            }
+            // The packet came from the connected device
+        }
+        // Can't send the packet to the connected device (no connected device)
         return null;
     }
 
     @Override
     public Packet processPacket(Packet packet, AbsDevice sender) {
+        // TODO: TCP & DHCP
+        if (!sender.equals(this)) {
+            if (packet.getProtocolType().equals(Protocols.DHCP)) {
+                // Process packet
+                DHCP p = packet.getDHCP();
+            } else if (packet.getProtocolType().equals(Protocols.ARP)) {
+                // Process packet
+                ARP p = packet.getARP();
+                if (p.getTargetMac().toString().equals(super.getMac().toString())
+                        || p.getTargetIP().toString().equals(super.getIP().toString())) {
+                    // Packet is for this device
+                    if (p.getOperation().equals(Operation.Request)) {
+                        // Packet is a request
+                        ARP arp = new ARP(Operation.Reply, super.getMac(), super.getIP(), p.getSourceMac(), p.getSourceIP());
+                        return new Packet(arp, Protocols.ARP);
+                    }
+                }
+            } else if (packet.getProtocolType().equals(Protocols.TCP)) {
+                // Process packet
+                TCP p = packet.getTCP();
+                if (p.getDestinationAddress().toString().equals(super.getIP().toString())) {
+                    // Packet is for this device
+                }
+            } else if (packet.getProtocolType().equals(Protocols.ICMP)) {
+                // Process packet
+                ICMP p = packet.getICMP();
+                if (p.getDestinationAddress().toString().equals(super.getIP().toString())) {
+                    // Packet is for this device
+                    ICMP icmp = new ICMP(super.getIP(), p.getSourceAddress(), super.getMac(), 2, 0);
+                    return new Packet(icmp, Protocols.ICMP);
+                }
+            }
+        }
         return null;
     }
 

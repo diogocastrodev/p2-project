@@ -2,12 +2,12 @@ package cache;
 
 import abstracts.AbsDevice;
 import abstracts.MapCache;
-import classes.addresses.Mac;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DevicesCache extends MapCache<String, AbsDevice> {
+public class DevicesCache extends MapCache<String, AbsDevice> implements Serializable {
     private static final Map<String, AbsDevice> cache = new HashMap<>();
 
     public DevicesCache() {
@@ -37,6 +37,10 @@ public class DevicesCache extends MapCache<String, AbsDevice> {
      */
     public static void removeDevice(String mac) {
         cache.remove(mac);
+    }
+
+    public void load (Map<String, AbsDevice> devicesCache) {
+        cache.putAll(devicesCache);
     }
 
 }

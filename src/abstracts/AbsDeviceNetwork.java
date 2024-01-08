@@ -5,6 +5,7 @@ import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import classes.dhcp.DHCPDist;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * with multiple ports
  * and a DHCP configuration.
  */
-public abstract class AbsDeviceNetwork extends AbsDevice {
+public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable {
     /**************************************************************************
      * Variables
      **************************************************************************/
@@ -186,14 +187,18 @@ public abstract class AbsDeviceNetwork extends AbsDevice {
 
         String ports = "";
 
+        String[] port = new String[this.getPortsAmount() + 1];
+
         for (int i = 1; i <= this.getPortsAmount(); i++) {
             AbsDevice device = this.ports.get(i);
             if (device != null) {
-                ports += "{" + i + "='" + device.getMac() + "'}";
+                port[i] = "{" + i + "='" + device.getMac() + "'}";
             } else {
-                ports += "{" + i + "='null'}";
+                port[i] = "{" + i + "=''}";
             }
         }
+
+        ports = String.join(", ", port);
 
         return "AbsDeviceNetwork{" +
                 "dhcpDist=" + dhcpDist +

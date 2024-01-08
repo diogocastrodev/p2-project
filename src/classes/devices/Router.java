@@ -5,8 +5,10 @@ import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import classes.dhcp.DHCPDist;
 
+import java.io.Serializable;
+
 // Router'll be considered a switch but with different way to process
-public class Router extends Switch {
+public class Router extends Switch implements Serializable {
     public Router(Mac mac, IP ip, int portCount) throws InvalidArgumentException  {
         super(mac, ip, portCount);
     }

@@ -6,11 +6,13 @@ import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import enums.Connection;
 
+import java.io.Serializable;
+
 /**
  * This is a class for a device
  * with a single port.
  */
-public abstract class AbsDeviceEnd extends AbsDevice {
+public abstract class AbsDeviceEnd extends AbsDevice implements Serializable {
 
     /**************************************************************************
      * Variables

@@ -8,10 +8,11 @@ import classes.packages.Packet;
 import enums.IPType;
 import enums.Status;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbsDevice {
+public abstract class AbsDevice implements Serializable {
     /**************************************************************************
      * Variables
      **************************************************************************/

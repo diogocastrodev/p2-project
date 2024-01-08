@@ -2,7 +2,9 @@ package classes.addresses;
 
 import classes.exceptions.InvalidArgumentException;
 
-public class Mac {
+import java.io.Serializable;
+
+public class Mac implements Serializable {
 
     /**
      * Mac Address

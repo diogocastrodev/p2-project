@@ -7,10 +7,8 @@ import classes.addresses.Mac;
 import classes.devices.Device;
 import enums.Connection;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DataManager {
@@ -36,12 +34,13 @@ public class DataManager {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            PrintWriter printWriter = new PrintWriter(file);
-            for (AbsDevice device : devicesCache.getCache().values()) {
-                printWriter.println(device.toString());
-            }
-            printWriter.close();
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+
+            oos.writeObject(devicesCache.getCache());
+
+            oos.close();
         } catch (IOException e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         }
     }
@@ -53,23 +52,14 @@ public class DataManager {
             File file = new File(folderPath + fileName);
             if (!file.exists()) {
                 file.createNewFile();
+                devicesCache.clear();
+                return;
+                // Device not exist
             }
-            devicesCache.clear();
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String type = line.split("\\{")[0];
-                String ip = this.extract(line, "ip");
-                String mac = this.extract(line, "mac");
-                switch (type) {
-                    case "Device":
-                        String name = this.extract(line, "name");
-                        String connection = this.extract(line, "connection").toUpperCase();
-                        new Device(new IP(ip), new Mac(mac), name, Connection.valueOf(connection));
-                        break;
-                }
-
-            }
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            Map<String, AbsDevice> devices = (Map<String, AbsDevice>) ois.readObject();
+            devicesCache.load(devices);
+            ois.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
