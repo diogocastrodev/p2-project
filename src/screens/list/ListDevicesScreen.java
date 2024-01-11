@@ -5,11 +5,8 @@ import abstracts.AbsDeviceEnd;
 import abstracts.AbsDeviceNetwork;
 import abstracts.AbsScreen;
 import cache.DevicesCache;
-import classes.devices.Device;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ListDevicesScreen extends AbsScreen {
@@ -21,8 +18,13 @@ public class ListDevicesScreen extends AbsScreen {
         System.out.println("0. Voltar");
     }
 
+    public ListDevicesScreen() {
+        this.screen(true);
+    }
+
     @Override
     public void handleOption(int option) {
+        System.out.println(option);
         switch (option) {
             case 1:
                 // this.listDevices();
@@ -31,7 +33,7 @@ public class ListDevicesScreen extends AbsScreen {
                     System.out.println(device);
                 }
                 super.pressEnterToContinue();
-                break;
+                return;
             case 2:
                 // this.listPackets();
                 Set<String> alreadyPrinted = new HashSet<>();
@@ -42,7 +44,18 @@ public class ListDevicesScreen extends AbsScreen {
                         alreadyPrinted.addAll(listed);
                     }
                 }
-                break;
+                for (AbsDevice device : new DevicesCache().getCache().values()) {
+                    if (device instanceof AbsDeviceEnd) {
+                        if (!alreadyPrinted.contains(device.getMac().toString())) {
+                            System.out.println(device);
+                            if (((AbsDeviceEnd) device).getConnectedDevice() != null) {
+                                alreadyPrinted.add(((AbsDeviceEnd) device).getConnectedDevice().getMac().toString());
+                            }
+                        }
+                    }
+                }
+                super.pressEnterToContinue();
+                return;
             case 0:
                 // this.goBack();
                 break;

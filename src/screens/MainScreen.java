@@ -18,6 +18,10 @@ public class MainScreen extends AbsScreen {
         System.out.println("0. Sair");
     }
 
+    public MainScreen() {
+        this.screen(true);
+    }
+
     @Override
     public void handleOption(int option) throws InvalidOptionException {
         switch (option) {

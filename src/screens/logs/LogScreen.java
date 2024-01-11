@@ -4,10 +4,7 @@ import abstracts.AbsScreen;
 import classes.exceptions.InvalidOptionException;
 import classes.logger.Logger;
 
-import java.io.File;
-import java.io.Reader;
 import java.util.List;
-import java.util.Scanner;
 
 public class LogScreen extends AbsScreen {
 
@@ -17,6 +14,10 @@ public class LogScreen extends AbsScreen {
         System.out.println("2. Abrir último log guardado");
         System.out.println("3. Abrir a pasta dos logs");
         System.out.println("0. Voltar");
+    }
+
+    public LogScreen() {
+        this.screen(true);
     }
 
     @Override

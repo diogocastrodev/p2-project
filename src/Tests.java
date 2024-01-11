@@ -13,6 +13,8 @@ public class Tests {
     public Tests() throws InvalidArgumentException {
         TestTools testTools = new TestTools();
 
+
+
         new MainScreen();
     }
 }

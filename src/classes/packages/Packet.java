@@ -1,6 +1,5 @@
 package classes.packages;
 
-import classes.addresses.IP;
 import classes.logger.Logger;
 import classes.protocols.*;
 import enums.Protocols;

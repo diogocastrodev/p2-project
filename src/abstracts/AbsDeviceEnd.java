@@ -1,6 +1,5 @@
 package abstracts;
 
-import abstracts.AbsDevice;
 import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
@@ -124,12 +123,16 @@ public abstract class AbsDeviceEnd extends AbsDevice implements Serializable {
 
     @Override
     public String toString() {
+        String connectedDeviceMac = "Vazio";
+        if (this.getConnectedDevice() != null) {
+            connectedDeviceMac = this.getConnectedDevice().getMac().toString();
+        }
         return "AbsDeviceEnd{" +
                 "name='" + this.getName() + "\', " +
                 "ip='" + this.getIP() + "', " +
                 "mac='" + this.getMac() + "', " +
                 "status='" + this.getStatus() + "', " +
                 "connection='" + this.getConnection() + "', " +
-                "connectedDevice='" + this.getConnectedDevice().getMac() + "'}";
+                "connectedDevice='" + connectedDeviceMac + "'}";
     }
 }

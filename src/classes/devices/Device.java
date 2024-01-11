@@ -111,11 +111,11 @@ public class Device extends AbsDeviceEnd implements Serializable {
 
     @Override
     public Packet processPacket(Packet packet, AbsDevice sender) {
-        // TODO: TCP & DHCP
         if (!sender.equals(this)) {
             if (packet.getProtocolType().equals(Protocols.DHCP)) {
                 // Process packet
                 DHCP p = packet.getDHCP();
+                return null; // End devices won't process DHCP packets
             } else if (packet.getProtocolType().equals(Protocols.ARP)) {
                 // Process packet
                 ARP p = packet.getARP();
@@ -133,6 +133,12 @@ public class Device extends AbsDeviceEnd implements Serializable {
                 TCP p = packet.getTCP();
                 if (p.getDestinationAddress().toString().equals(super.getIP().toString())) {
                     // Packet is for this device
+                    try {
+                        TCP tcp = new TCP(super.getIP(), p.getSourceAddress(), p.getDestinationPort(), p.getDestinationPort(), p.getAcknowledgementNumber(), p.getWindow(), "Resposta");
+                        return new Packet(tcp, Protocols.TCP);
+                    } catch (InvalidArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             } else if (packet.getProtocolType().equals(Protocols.ICMP)) {
                 // Process packet

@@ -1,13 +1,9 @@
 package cache;
 
-import abstracts.AbsDevice;
-import abstracts.MapCache;
 import abstracts.SetCache;
 import classes.addresses.Mac;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class MacCache extends SetCache<String> {

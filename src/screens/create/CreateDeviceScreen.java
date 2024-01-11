@@ -25,6 +25,10 @@ public class CreateDeviceScreen extends AbsScreen {
         System.out.println("0 - Sair"); 
     }
 
+    public CreateDeviceScreen() {
+        this.screen(true);
+    }
+
     @Override
     public void handleOption(int option) throws InvalidOptionException {
         if (option == 0) {

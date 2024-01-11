@@ -158,9 +158,9 @@ public abstract class AbsDevice implements Serializable {
     @Override
     public String toString() {
         return "AbsDevice{" +
-                "status=" + status +
-                ", ip=" + ip +
-                ", mac=" + mac +
+                "status=" + this.getStatus().toString() +
+                ", ip=" + this.getIP().toString() +
+                ", mac=" + this.getMac().toString() +
                 '}';
     }
 }

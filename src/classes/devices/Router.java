@@ -3,7 +3,6 @@ package classes.devices;
 import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
-import classes.dhcp.DHCPDist;
 
 import java.io.Serializable;
 

@@ -187,14 +187,14 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
 
         String ports = "";
 
-        String[] port = new String[this.getPortsAmount() + 1];
+        String[] port = new String[this.getPortsAmount()];
 
-        for (int i = 1; i <= this.getPortsAmount(); i++) {
+        for (int i = 0; i < this.getPortsAmount(); i++) {
             AbsDevice device = this.ports.get(i);
             if (device != null) {
-                port[i] = "{" + i + "='" + device.getMac() + "'}";
+                port[i] = "{" + (i + 1) + "='" + device.getMac() + "'}";
             } else {
-                port[i] = "{" + i + "=''}";
+                port[i] = "{" + (i + 1) + "=''}";
             }
         }
 
@@ -205,7 +205,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
                 ", mac='" + super.getMac() + '\'' +
                 ", ip='" + super.getIP() + '\'' +
                 ", portsAmount='" + portsAmount + '\'' +
-                ", ports=" + ports +
+                ", ports=[" + ports + "]" +
                 '}';
     }
 }

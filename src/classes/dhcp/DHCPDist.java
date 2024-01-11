@@ -8,7 +8,6 @@ import classes.logger.Logger;
 import classes.packages.Packet;
 import classes.protocols.DHCP;
 import classes.protocols.ICMP;
-import classes.protocols.Protocol;
 import enums.DHCPType;
 import enums.Operation;
 import enums.Protocols;

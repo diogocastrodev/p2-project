@@ -23,19 +23,27 @@ public abstract class AbsScreen {
      * Constructor for AbsScreen
      */
     public AbsScreen() {
+    }
+
+    public void screen(boolean header) {
         while (true) {
             clearScreen();
-            this.drawHeader();
+            if (header) {
+                this.drawHeader();
+            }
             this.drawMenu();
             Scanner scanner = new Scanner(System.in);
             System.out.println("");
             String option = scanner.nextLine();
+            if (option.equals("")) {
+                option = "-1";
+            }
             int optionInt = 0;
             try {
                 optionInt = Integer.parseInt(option);
                 this.handleOption(optionInt);
             } catch (Exception e) {
-                System.out.println("Opção inválida");
+                optionInt = -1;
             }
             if (optionInt == 0) {
                 break;
