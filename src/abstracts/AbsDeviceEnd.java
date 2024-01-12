@@ -92,11 +92,11 @@ public abstract class AbsDeviceEnd extends AbsDevice implements Serializable {
      * Connection to an END device.
      * @param connectedDevice Device connected to this device.
      */
-    public void setConnectedDevice(AbsDevice connectedDevice) throws InvalidArgumentException {
+    public void setConnectedDevice(AbsDeviceEnd connectedDevice) throws InvalidArgumentException {
         if (connectedDevice == null) {
             throw new InvalidArgumentException("Device is not valid.");
         }
-        AbsDeviceEnd t = ((AbsDeviceEnd) connectedDevice);
+        AbsDeviceEnd t = connectedDevice;
         if (t.getConnectedDevice() != null) {
             throw new InvalidArgumentException("Device is already connected to another device.");
         } else {
@@ -108,11 +108,11 @@ public abstract class AbsDeviceEnd extends AbsDevice implements Serializable {
     /**
      * Connection to a Network device.
      */
-    public void setConnectedDevice(AbsDevice connectedDevice, int port) throws InvalidArgumentException {
+    public void setConnectedDevice(AbsDeviceNetwork connectedDevice, int port) throws InvalidArgumentException {
         if (connectedDevice == null) {
             throw new InvalidArgumentException("Device is not valid.");
         }
-        AbsDeviceNetwork t = ((AbsDeviceNetwork) connectedDevice);
+        AbsDeviceNetwork t = connectedDevice;
         t.setPort(port, this);
         this.forceSetConnectedDevice(connectedDevice);
     }

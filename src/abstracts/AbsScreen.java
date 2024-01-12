@@ -45,7 +45,11 @@ public abstract class AbsScreen {
             try {
                 optionInt = Integer.parseInt(option);
                 this.handleOption(optionInt);
+            } catch (InvalidOptionException e) {
+                System.out.println(e.getMessage());
+                optionInt = -1;
             } catch (Exception e) {
+                System.out.println(e);
                 optionInt = -1;
             }
             if (optionInt == 0) {

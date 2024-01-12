@@ -7,7 +7,9 @@ import classes.dhcp.DHCPDist;
 import others.Consts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,7 +101,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
      * @param device
      * @throws InvalidArgumentException
      */
-    public void setPort(int port, AbsDevice device) throws InvalidArgumentException {
+    public void setPort(int port, AbsDeviceEnd device) throws InvalidArgumentException {
         if (device == null) { // Verificar se o device é válido
             throw new InvalidArgumentException("Device is not valid"); // Mensagem de erro
         }
@@ -109,7 +111,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         if (this.ports.containsKey(port)) { // Verificar se o port já está em uso
             throw new InvalidArgumentException("Port is already in use"); // Mensagem de erro
         }
-        AbsDeviceEnd t = ((AbsDeviceEnd) device);
+        AbsDeviceEnd t = device;
         if (t.getConnectedDevice() != null) { // Verificar se o AbsDeviceEnd já está conectado a outro device
             throw new InvalidArgumentException("Device is already connected to another device."); // Mensagem de erro
         } else {
@@ -118,7 +120,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         this.ports.put(port, device); // Adicionar o device ao port
     }
 
-    public void connectDevice(int port, AbsDevice device) throws InvalidArgumentException {
+    public void connectDevice(int port, AbsDeviceEnd device) throws InvalidArgumentException {
         this.setPort(port, device);
     }
 
@@ -132,8 +134,8 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
      * @param device Device to connect
      * @param portDevice That'll be the port IN the device is connected to this device
      */
-    public void setPort(int port, AbsDevice device, int portDevice) throws InvalidArgumentException {
-        if (device == null) { // Verificar se o device é válido
+    public void setPort(int port, AbsDeviceNetwork device, int portDevice) throws InvalidArgumentException {
+        if (device == null) { // Desconectar o device
             throw new InvalidArgumentException("Device is not valid"); // Mensagem de erro
         }
         if (port <= 0 || port > this.getPortsAmount()) { // Verificar se o número da porta é válido
@@ -156,7 +158,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         this.forceSetPort(port, device); // Adicionar o device ao port
     }
 
-    public void connectDevice(int port, AbsDevice device, int portDevice) throws InvalidArgumentException {
+    public void connectDevice(int port, AbsDeviceNetwork device, int portDevice) throws InvalidArgumentException {
         this.setPort(port, device, portDevice);
     }
 
@@ -166,6 +168,18 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
     public AbsDevice removePort(int port) throws InvalidArgumentException {
         if (port <= 0 || port > this.getPortsAmount()) {
             throw new InvalidArgumentException("Port is not valid");
+        }
+        AbsDevice device = this.ports.get(port);
+        if (device instanceof AbsDeviceEnd) {
+            ((AbsDeviceEnd) device).forceSetConnectedDevice(null);
+        } else if (device instanceof AbsDeviceNetwork) {
+            // Search where this device is connected
+            for (int i = 0; i < ((AbsDeviceNetwork) device).getPortsAmount(); i++) {
+                AbsDevice d = ((AbsDeviceNetwork) device).getPort(i);
+                if (d != null && d.equals(this)) {
+                    ((AbsDeviceNetwork) device).forceSetPort(i, null);
+                }
+            }
         }
         return this.ports.remove(port);
     }
@@ -180,11 +194,11 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         return this.ports.get(port);
     }
 
-    public int[] getEmptyPorts() {
-        int[] emptyPorts = new int[this.getPortsAmount()];
+    public List<Integer> getEmptyPorts() {
+        List<Integer> emptyPorts = new ArrayList<>();
         for (int i = 0; i < this.getPortsAmount(); i++) {
-            if (this.ports.get(i + 1) == null) {
-                emptyPorts[i] = i + 1;
+            if (this.ports.get(i) == null) {
+                emptyPorts.add(i + 1);
             }
         }
         return emptyPorts;

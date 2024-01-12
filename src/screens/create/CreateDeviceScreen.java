@@ -11,6 +11,7 @@ import classes.devices.Router;
 import classes.devices.Switch;
 import classes.exceptions.InvalidArgumentException;
 import classes.exceptions.InvalidOptionException;
+import others.Consts;
 import screens.Input;
 import test_tools.TestTools;
 
@@ -42,22 +43,25 @@ public class CreateDeviceScreen extends AbsScreen {
         Scanner scanner = new Scanner(System.in);
         IP ip = null;
         if (option == 1)
-            while (true) {
-                System.out.println("IP:");
-                System.out.println("Estático (1) ou Dinâmico (2)?");
-                int ipOption = scanner.nextInt();
-                scanner.nextLine();
-                if (ipOption == 1) {
-                    ip = new Input().readIP();
+            if (Consts.allowDHCP)
+                while (true) {
+                    System.out.println("IP:");
+                    System.out.println("Estático (1) ou Dinâmico (2)?");
+                    int ipOption = scanner.nextInt();
+                    scanner.nextLine();
+                    if (ipOption == 1) {
+                        ip = new Input().readIP();
 
-                    break;
-                } else if (ipOption == 2) {
-                    ip = new IP();
-                    break;
-                } else {
-                    System.out.println("Opção inválida!");
+                        break;
+                    } else if (ipOption == 2) {
+                        ip = new IP();
+                        break;
+                    } else {
+                        System.out.println("Opção inválida!");
+                    }
                 }
-            }
+            else
+                ip = new Input().readIP();
         else if (option > 1) {
             ip = new Input().readIP();
         }

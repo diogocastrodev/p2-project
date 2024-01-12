@@ -12,9 +12,17 @@ import classes.devices.Router;
 import classes.devices.Switch;
 import classes.exceptions.InvalidOptionException;
 import classes.logger.Logger;
+import classes.packages.Packet;
+import classes.protocols.ARP;
+import classes.protocols.ICMP;
+import classes.protocols.TCP;
+import enums.Operation;
+import enums.Protocols;
 import others.Consts;
 import screens.Input;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SelectedDeviceScreen extends AbsScreen {
@@ -114,31 +122,257 @@ public class SelectedDeviceScreen extends AbsScreen {
     }
 
     private void sendPacket() {
-        // TODO: Send a packet to another device
+        if (device instanceof AbsDeviceEnd) {
+            if (((AbsDeviceEnd) device).getConnectedDevice() == null) {
+                System.out.println("Não há dispositivo conectado");
+                super.pressEnterToContinue();
+                return;
+            }
+        } else if (device instanceof AbsDeviceNetwork) {
+            if (((AbsDeviceNetwork) device).getPorts().keySet().size() == ((AbsDeviceNetwork) device).getPortsAmount()) {
+                System.out.println("Não há portas disponíveis");
+                super.pressEnterToContinue();
+                return;
+            }
+        }
+        String dhcp = "";
+        if (Consts.allowDHCP) {
+            dhcp = "/DHCP";
+        }
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite o IP de destino: ");
-        String ip = scanner.nextLine();
-        System.out.println("Digite o MAC de destino: ");
-        String mac = scanner.nextLine();
-        System.out.println("Digite o conteúdo do pacote: ");
-        String content = scanner.nextLine();
-        new Logger().save();
+        System.out.println("Tipo de Protocolo (ARP/ICMP/TCP" + dhcp + "): ");
+        String protocol = scanner.nextLine().trim().toUpperCase();
+        Protocols protocolType = Protocols.valueOf(protocol);
+        Packet packet = null;
+        switch (protocolType) {
+            case ARP:
+                System.out.println("IP de destino: ");
+                IP destinationIP = new Input().readIP();
+                ARP arp = new ARP(Operation.Request, device.getMac(), device.getIP(), null, destinationIP);
+                packet = new Packet(arp, Protocols.ARP);
+                break;
+            case ICMP:
+                System.out.println("IP de destino: ");
+                IP destinationIPICMP = new Input().readIP();
+                System.out.println("Dados: ");
+                Object dataICMP = scanner.next();
+                ICMP icmp = new ICMP(device.getIP(), destinationIPICMP, dataICMP, 1, 0);
+                packet = new Packet(icmp, Protocols.ICMP);
+                break;
+            case TCP:
+                System.out.println("IP de destino: ");
+                IP destinationIPTCP = new Input().readIP();
+                System.out.println("Porta de origem: ");
+                int sourcePort = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Porta de destino: ");
+                int destinationPort = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Dados: ");
+                Object data = scanner.next();
+                // Generate random number
+                int random = (int) (Math.random() * 2500);
+                try {
+                    TCP tcp = new TCP(device.getIP(), destinationIPTCP, sourcePort, destinationPort, random,1, data);
+                    packet = new Packet(tcp, Protocols.TCP);
+                } catch (Exception e) {
+                    System.out.println("Erro ao enviar pacote");
+                }
+                break;
+            case DHCP:
+                if (Consts.allowDHCP) {
+                    // TODO: DHCP
+                }
+                break;
+            default:
+                System.out.println("Protocolo inválido!");
+                break;
+        }
+        if (packet != null) {
+            System.out.println("Enviando: " + packet);
+            Packet p = device.sendPacket(packet, device);
+            String pac = "";
+            if (p != null) {
+                pac = p.toString();
+            } else {
+                pac = "Vazio";
+            }
+            System.out.println("Recebido: " + pac);
+            new Logger().save();
+        }
+
     }
 
     private void connect() {
-        // TODO: Connect to another device
-        // When connect to another device, send dhcp to the device
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite o MAC do dispositivo a ser conectado: ");
-        String mac = scanner.nextLine();
+        if (device instanceof AbsDeviceEnd) {
+            if (((AbsDeviceEnd) device).getConnectedDevice() != null) {
+                System.out.println("Já há um dispositivo conectado");
+                super.pressEnterToContinue();
+                return;
+            }
+        } else if (device instanceof AbsDeviceNetwork) {
+            if (((AbsDeviceNetwork) device).getEmptyPorts().size() == 0) {
+                System.out.println("Não há portas disponíveis");
+                super.pressEnterToContinue();
+                return;
+            }
+        }
+        List<AbsDevice> connectable = new ArrayList<>();
+        for (AbsDevice device : new DevicesCache().getCache().values()) {
+            if (device instanceof AbsDeviceEnd) {
+                if (((AbsDeviceEnd) device).getConnectedDevice() == null && !device.equals(this.device)) {
+                    connectable.add(device);
+                }
+            } else if (device instanceof AbsDeviceNetwork) {
+                if (((AbsDeviceNetwork) device).getEmptyPorts().size() > 0 && !device.equals(this.device)) {
+                    connectable.add(device);
+                }
+            }
+        }
+        if (connectable.size() == 0) {
+            System.out.println("Não há dispositivos disponíveis");
+            super.pressEnterToContinue();
+            return;
+        }
+        System.out.println("Dispositivos disponíveis: ");
+        for (int i = 0; i < connectable.size(); i++) {
+            System.out.println((i + 1) + " - " + connectable.get(i).getMac());
+        }
+        System.out.println("0 - Cancelar");
+        System.out.println("Digite o número do dispositivo que deseja conectar: ");
+        int option = scanner.nextInt();
+        scanner.nextLine();
+        if (option == 0)
+            return;
+        int port = 0;
+        if (this.device instanceof AbsDeviceNetwork) {
+            while (true) {
+                System.out.println("Digite a porta que deseja conectar: ");
+                port = scanner.nextInt();
+                scanner.nextLine();
+                if (port > 0 && port <= ((AbsDeviceNetwork) this.device).getPortsAmount()) {
+                    try {
+                        if (((AbsDeviceNetwork) this.device).getPort(port) != null) {
+                            System.out.println("Porta ocupada");
+                            continue;
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Porta ocupada");
+                    }
+                } else {
+                    System.out.println("Porta inválida");
+                }
+            }
+        }
+        AbsDevice deviceToConnect = connectable.get(option - 1);
+        try {
+            if (device instanceof AbsDeviceEnd) {
+                if (deviceToConnect instanceof AbsDeviceEnd)
+                    ((AbsDeviceEnd) device).setConnectedDevice((AbsDeviceEnd) deviceToConnect);
+                else if (deviceToConnect instanceof AbsDeviceNetwork) {
+                    while (true) {
+                        System.out.println("Portas disponíveis: ");
+                        List<Integer> emptyPorts = ((AbsDeviceNetwork) deviceToConnect).getEmptyPorts();
+                        for (int p : emptyPorts) {
+                            System.out.print(p + " ");
+                            if (p != emptyPorts.get(emptyPorts.size() - 1))
+                                System.out.print(", ");
+                        }
+                        System.out.println();
+                        System.out.println("Digite a porta que deseja conectar: ");
+                        port = scanner.nextInt();
+                        scanner.nextLine();
+                        if (port > 0 && port <= ((AbsDeviceNetwork) deviceToConnect).getPortsAmount()) {
+                            try {
+                                if (((AbsDeviceNetwork) deviceToConnect).getPort(port) != null) {
+                                    System.out.println("Porta ocupada");
+                                    continue;
+                                }
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("Porta ocupada");
+                            }
+                        } else {
+                            System.out.println("Porta inválida");
+                        }
+                    }
+                    ((AbsDeviceEnd) this.device).setConnectedDevice((AbsDeviceNetwork) deviceToConnect, port - 1);
+                }
+            } else if (this.device instanceof AbsDeviceNetwork) {
+                if (deviceToConnect instanceof AbsDeviceEnd) {
+                    ((AbsDeviceNetwork) this.device).setPort(port - 1, (AbsDeviceEnd) deviceToConnect);
+                    return;
+                }
+                int portDest = 0;
+                while (true) {
+                    System.out.println("Portas disponíveis: ");
+                    List<Integer> emptyPorts = ((AbsDeviceNetwork) deviceToConnect).getEmptyPorts();
+                    for (int p : emptyPorts) {
+                        System.out.print(p + " ");
+                        if (p != emptyPorts.get(emptyPorts.size() - 1))
+                            System.out.print(", ");
+                    }
+                    System.out.println("");
+                    System.out.println("Digite a porta que deseja conectar: ");
+                    portDest = scanner.nextInt();
+                    scanner.nextLine();
+                    if (portDest > 0 && portDest <= ((AbsDeviceNetwork) device).getPortsAmount()) {
+                        try {
+                            if (((AbsDeviceNetwork) device).getPort(portDest) != null) {
+                                System.out.println("Porta ocupada");
+                                continue;
+                            }
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Porta ocupada");
+                        }
+                    } else {
+                        System.out.println("Porta inválida");
+                    }
+                }
+                if (deviceToConnect instanceof AbsDeviceEnd)
+                    ((AbsDeviceNetwork) device).setPort(port - 1, (AbsDeviceEnd) deviceToConnect);
+                else if (deviceToConnect instanceof AbsDeviceNetwork)
+                    ((AbsDeviceNetwork) device).setPort(port - 1, (AbsDeviceNetwork) deviceToConnect, portDest - 1);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao conectar");
+        }
         new DataManager().saveDevices();
     }
 
     private void disconnect() {
+        if (device instanceof AbsDeviceEnd) {
+            if (((AbsDeviceEnd) device).getConnectedDevice() == null) {
+                System.out.println("Não há dispositivo conectado");
+                super.pressEnterToContinue();
+                return;
+            }
+        } else if (device instanceof AbsDeviceNetwork) {
+            if (((AbsDeviceNetwork) device).getEmptyPorts().size() == ((AbsDeviceNetwork) device).getPortsAmount()) {
+                System.out.println("Não há portas disponíveis");
+                super.pressEnterToContinue();
+                return;
+            }
+        }
         if (device instanceof AbsDeviceEnd)
             try {
-                ((AbsDeviceEnd) device).setConnectedDevice(null);
+                AbsDevice connected = ((AbsDeviceEnd) device).getConnectedDevice();
+                if (connected instanceof AbsDeviceEnd) {
+                    ((AbsDeviceEnd) device).forceSetConnectedDevice(null);
+                    ((AbsDeviceEnd) connected).forceSetConnectedDevice(null);
+                } else if (connected instanceof AbsDeviceNetwork) {
+                    for (int i = 0; i < ((AbsDeviceNetwork) connected).getPortsAmount(); i++) {
+                        AbsDevice d = ((AbsDeviceNetwork) connected).getPort(i);
+                        if (d != null && d.equals(device)) {
+                            ((AbsDeviceNetwork) connected).removePort(i);
+                            break;
+                        }
+                    }
+                }
             } catch (Exception e) {
+                System.out.println(e);
                 System.out.println("Não há dispositivo conectado");
             }
         else if (device instanceof AbsDeviceNetwork) {
@@ -147,34 +381,39 @@ public class SelectedDeviceScreen extends AbsScreen {
             int port = scanner.nextInt();
             scanner.nextLine();
             try {
-                ((AbsDeviceNetwork) device).setPort(port, null);
+                ((AbsDeviceNetwork) device).removePort(port-1);
+                System.out.println("Desconectado com sucesso!");
             } catch (Exception e) {
+                System.out.println(e);
                 System.out.println("Não há dispositivo conectado");
             }
         }
         new DataManager().saveDevices();
+        super.pressEnterToContinue();
     }
 
     private void changeIP() {
-        // TODO: CHANGE IP (ask static or DHCP) and only static for network
         if (device instanceof AbsDeviceEnd) {
-            // TODO: DHCP or static
             IP ip = null;
-            while (true) {
-                System.out.println("IP:");
-                System.out.println("Estático (1) ou Dinâmico (2)?");
-                int ipOption = scanner.nextInt();
-                scanner.nextLine();
-                if (ipOption == 1) {
-                    ip = new Input().readIP();
-                    break;
-                } else if (ipOption == 2) {
-                    ip = new IP();
-                    // TODO: DHCP
-                    break;
-                } else {
-                    System.out.println("Opção inválida!");
+            if (Consts.allowDHCP) {
+                while (true) {
+                    System.out.println("IP:");
+                    System.out.println("Estático (1) ou Dinâmico (2)?");
+                    int ipOption = scanner.nextInt();
+                    scanner.nextLine();
+                    if (ipOption == 1) {
+                        ip = new Input().readIP();
+                        break;
+                    } else if (ipOption == 2) {
+                        ip = new IP();
+                        // TODO: DHCP
+                        break;
+                    } else {
+                        System.out.println("Opção inválida!");
+                    }
                 }
+            } else {
+                ip = new Input().readIP();
             }
             device.setIP(ip);
         } else if (device instanceof AbsDeviceNetwork) {

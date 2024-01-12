@@ -54,6 +54,12 @@ public class DataManager {
             Map<String, AbsDevice> devices = (Map<String, AbsDevice>) ois.readObject();
             devicesCache.load(devices);
             ois.close();
+        } catch (EOFException e) {
+            devicesCache.clear();
+        } catch (InvalidClassException e) {
+            System.out.println("Ficheiro de dados corrompido. A limpar...");
+            devicesCache.clear();
+            this.saveDevices();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {

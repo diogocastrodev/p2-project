@@ -14,6 +14,7 @@ import classes.protocols.TCP;
 import enums.DHCPType;
 import enums.Operation;
 import enums.Protocols;
+import others.Consts;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -38,6 +39,9 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
      * @return Packet to be returned (last packet)
      */
     public Packet sendPacket(Packet packet, AbsDevice sender) {
+        for (AbsDevice device : this.getPorts().values()) {
+            this.sendPacket(packet, sender, device);
+        }
         return null;
     }
 
@@ -52,7 +56,12 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
         if (destination == null || destination.equals(this) || destination.equals(sender)) {
             return null;
         }
-        return destination.processPacket(packet, sender);
+        new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Sending to " + destination.getIP() + " (" + destination.getMac() + ")");
+        Packet p = destination.processPacket(packet, this);
+        if (p != null) {
+            new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Received a packet from " + destination.getIP() + " (" + destination.getMac() + ")");
+        }
+        return p;
     }
 
     /**
@@ -63,26 +72,28 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
      */
     @Override
     public Packet processPacket(Packet packet, AbsDevice sender) {
-        new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Received a packet"); // Log the packet
-        if (packet.getProtocolType().equals(Protocols.DHCP)) {
+        new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Received a packet"); // Log the packet
+        if (packet.getProtocolType().equals(Protocols.DHCP) && Consts.allowDHCP) {
             DHCP p = packet.getDHCP();
             if(super.getDhcp().getType().equals(DHCPType.Server)) {
                 try {
                     if (p.getDestinationAddress().toString().contains("255") ||
                             p.getDestinationAddress().toString().equals(super.getIP().toString()))
                     {
-                        new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocol().toString(), "Received a DHCP packet " + super.getIP() + " [" +  super.getMac() + "]"); // Log the packet
+                        new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Processing DHCP packet"); // Log the packet
                         return super.getDhcp().processServer(this, packet);
                     }
                     // Ignore the packet
                 } catch (InvalidArgumentException e) {
-                    new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Error processing DHCP Server");
+                    new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Error processing DHCP Server");
                 }
             }
         } else if (packet.getProtocolType().equals(Protocols.ARP)) {
             ARP p = packet.getARP();
-            if (this.table.containsKey(p.getTargetMac().toString())) {
-                new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Redirect to " + this.table.get(p.getTargetMac().toString()).getIP() + " (" + this.table.get(p.getTargetMac().toString()).getMac() + ")"); // Log the packet
+            if (p.getTargetIP().equals(this.getIP())) {
+                // For this device ignore
+            } else if (p.getTargetMac() != null && this.table.containsKey(p.getTargetMac().toString())) {
+                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Redirect to " + this.table.get(p.getTargetMac().toString()).getIP() + " (" + this.table.get(p.getTargetMac().toString()).getMac() + ")"); // Log the packet
                 return this.sendPacket(packet, sender, this.getPorts().get(this.table.get(p.getTargetMac().toString())));
             }
         }
@@ -90,13 +101,13 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
             TCP p = packet.getTCP();
             if (p.getDestinationAddress().toString().equals(super.getIP().toString())) {
                 // Process the packet
-                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Received a TCP packet " + super.getIP() + " [" +  super.getMac() + "]"); // Log the packet
+                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Processing TCP packet"); // Log the packet
             }
         } else if (packet.getProtocolType().equals(Protocols.ICMP)) {
             ICMP p = packet.getICMP();
             if (p.getDestinationAddress().toString().equals(super.getIP().toString())) {
                 // Process the packet
-                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Received an ICMP packet " + super.getIP() + " [" +  super.getMac() + "]"); // Log the packet
+                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Processing ICMP packet"); // Log the packet
                 ICMP icmp = new ICMP(super.getIP(), p.getSourceAddress(), super.getMac(), 2, 0);
                 return new Packet(icmp, Protocols.ICMP);
             }
@@ -104,13 +115,13 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
             ARP p = packet.getARP();
             if (p.getTargetIP().toString().equals(super.getIP().toString())) {
                 // Process the packet
-                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Received an ARP packet " + super.getIP() + " [" +  super.getMac() + "]"); // Log the packet
+                new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Processing ARP packet"); // Log the packet
                 ARP arp = new ARP(Operation.Reply, super.getMac(), super.getIP(), p.getSourceMac(), p.getSourceIP());
                 return new Packet(arp, Protocols.ARP);
             }
         }
-        new Logger().addLog(super.getIP(), super.getMac(), packet.toString(), "Redirect to all ports"); // Log the packet
-        return this.sendPacket(packet, this); // Send the packet to all ports
+        new Logger().addLog(super.getIP(), super.getMac(), packet.getProtocolType().toString(), "Redirect to all ports"); // Log the packet
+        return this.sendPacket(packet, sender); // Send the packet to all ports
     }
 
     @Override

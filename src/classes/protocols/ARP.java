@@ -213,6 +213,7 @@ public class ARP implements Protocol {
      */
     @Override
     public String toString() {
+        String targetMac = this.targetMac == null ? "null" : this.targetMac.toString();
         return "ARP{" +
                 "hardwareType=" + hardwareType + ", " +
                 "protocolType=" + protocolType + ", " +

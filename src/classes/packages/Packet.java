@@ -11,7 +11,7 @@ public class Packet {
     public Packet(Protocol protocol, Protocols protocolType) {
         this.setProtocol(protocol);
         this.setProtocolType(protocolType);
-        new Logger().addLog(protocolType, "New packet created");
+        new Logger().addLog(protocolType, "New packet created: " + protocol.toString());
     }
 
     public Protocol getProtocol() {
@@ -56,5 +56,13 @@ public class Packet {
             return null;
         }
         return (TCP) this.getProtocol();
+    }
+
+    @Override
+    public String toString() {
+        return "Packet{" +
+                "protocolType=" + protocolType +
+                ",protocol=" + protocol +
+                '}';
     }
 }

@@ -12,5 +12,6 @@ Screens:
     - [x] Alterar Nome (End Device)
     - [ ] Alterar settings DHCP (Network)
 
+[ ] - DHCP, there's an option in src/others/Consts that enable or disable DHCP, it's disabled because didn't finish it.
 
  Tem erros estranhos com o guardar e carregar de ficheiros, n faço ponta do que seja.
