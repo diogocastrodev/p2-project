@@ -5,13 +5,18 @@ Screens:
  - [x] List
  - [x] Logs
  - [x] Select
-    - [ ] Send packet
-    - [ ] Create connection
+    - [x] Send packet
+    - [x] Create connection
     - [x] Disconnect
     - [x] Alterar IP
     - [x] Alterar Nome (End Device)
     - [ ] Alterar settings DHCP (Network)
 
-[ ] - DHCP, there's an option in src/others/Consts that enable or disable DHCP, it's disabled because didn't finish it.
+DHCP, there's an option in src/others/Consts that enable or disable DHCP, it's disabled because didn't finish it.
 
  Tem erros estranhos com o guardar e carregar de ficheiros, n faço ponta do que seja.
+
+ Bugs:
+  - Às vezes o ficheiro de dados corrompe
+  - 1º porta dos switch/hub etc não funciona
+  - dispositivos end não conseguem desconectar de um switch/hub etc
