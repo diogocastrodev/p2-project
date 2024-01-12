@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Input{
 
-    public static IP readIP(){
+    public IP readIP(){
         Scanner scanner = new Scanner(System.in);
         IP finalIP = null;
         while (true) {
@@ -23,11 +23,10 @@ public class Input{
                 break;
             }
         }
-        scanner.close();
         return finalIP;
     }
 
-    public static Mac readMac(){
+    public Mac readMac(){
         Scanner scanner = new Scanner(System.in);
         Mac finalMac = null;
         while (true) {
@@ -43,7 +42,6 @@ public class Input{
                 break;
             }
         }
-        scanner.close();
         return finalMac;
     }
 

@@ -14,7 +14,7 @@ public class ListDevicesScreen extends AbsScreen {
     @Override
     public void drawMenu() {
         System.out.println("1. Listar dispositivos únicos");
-        System.out.println("2. Listar dispositivos formato rede");
+        //System.out.println("2. Listar dispositivos formato rede");
         System.out.println("0. Voltar");
     }
 
@@ -34,7 +34,7 @@ public class ListDevicesScreen extends AbsScreen {
                 }
                 super.pressEnterToContinue();
                 return;
-            case 2:
+            case -2:
                 // this.listPackets();
                 Set<String> alreadyPrinted = new HashSet<>();
                 for (AbsDevice device : new DevicesCache().getCache().values()) {

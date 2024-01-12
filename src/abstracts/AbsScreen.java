@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public abstract class AbsScreen {
 
+    public static final Scanner scanner = new Scanner(System.in);
+
     /**
      * Draws the menu of the screen.
      */
@@ -33,10 +35,11 @@ public abstract class AbsScreen {
             }
             this.drawMenu();
             Scanner scanner = new Scanner(System.in);
+            // FLush the buffer
             System.out.println("");
-            String option = scanner.nextLine();
+            String option = scanner.next();
             if (option.equals("")) {
-                option = "-1";
+                scanner.nextLine();
             }
             int optionInt = 0;
             try {

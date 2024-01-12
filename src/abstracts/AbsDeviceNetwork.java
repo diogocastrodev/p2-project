@@ -4,6 +4,7 @@ import classes.addresses.IP;
 import classes.addresses.Mac;
 import classes.exceptions.InvalidArgumentException;
 import classes.dhcp.DHCPDist;
+import others.Consts;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -179,9 +180,50 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         return this.ports.get(port);
     }
 
+    public int[] getEmptyPorts() {
+        int[] emptyPorts = new int[this.getPortsAmount()];
+        for (int i = 0; i < this.getPortsAmount(); i++) {
+            if (this.ports.get(i + 1) == null) {
+                emptyPorts[i] = i + 1;
+            }
+        }
+        return emptyPorts;
+    }
+
+
+
     /**************************************************************************
      * Methods
      **************************************************************************/
+    public String toStringPorts() {
+        String ports = "";
+
+        String[] port = new String[this.getPortsAmount()];
+
+        for (int i = 0; i < this.getPortsAmount(); i++) {
+            AbsDevice device = this.ports.get(i);
+            if (device != null) {
+                port[i] = "{" + (i + 1) + "='" + device + "'}";
+            } else {
+                port[i] = "{" + (i + 1) + "=''}";
+            }
+        }
+
+        ports = String.join(", ", port);
+
+        String dhcp = "";
+        if (Consts.allowDHCP) {
+            dhcp = ", dhcp=" + dhcpDist;
+        }
+
+        return "AbsDeviceNetwork{" +
+                "mac='" + super.getMac() + '\'' +
+                ", ip='" + super.getIP() + '\'' +
+                dhcp +
+                ", portsAmount='" + portsAmount + '\'' +
+                ", ports=[" + ports + "]" +
+                '}';
+    }
     @Override
     public String toString() {
 
@@ -200,10 +242,15 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
 
         ports = String.join(", ", port);
 
+        String dhcp = "";
+        if (Consts.allowDHCP) {
+            dhcp = ", dhcp=" + dhcpDist;
+        }
+
         return "AbsDeviceNetwork{" +
-                "dhcpDist=" + dhcpDist +
-                ", mac='" + super.getMac() + '\'' +
+                "mac='" + super.getMac() + '\'' +
                 ", ip='" + super.getIP() + '\'' +
+                dhcp +
                 ", portsAmount='" + portsAmount + '\'' +
                 ", ports=[" + ports + "]" +
                 '}';
