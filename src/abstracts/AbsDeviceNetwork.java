@@ -108,7 +108,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         if (port <= 0 || port > this.getPortsAmount()) { // Verificar se o número da porta é válido
             throw new InvalidArgumentException("Port is not valid"); // Mensagem de erro
         }
-        if (this.ports.containsKey(port)) { // Verificar se o port já está em uso
+        if (this.ports.containsKey(port - 1)) { // Verificar se o port já está em uso
             throw new InvalidArgumentException("Port is already in use"); // Mensagem de erro
         }
         AbsDeviceEnd t = device;
@@ -117,7 +117,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         } else {
             t.forceSetConnectedDevice(this); // Chamar o método forceSetConnectedDevice do AbsDeviceEnd para atribuir este device
         }
-        this.ports.put(port, device); // Adicionar o device ao port
+        this.forceSetPort(port, device); // Adicionar o device ao port
     }
 
     public void connectDevice(int port, AbsDeviceEnd device) throws InvalidArgumentException {
@@ -141,7 +141,7 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
         if (port <= 0 || port > this.getPortsAmount()) { // Verificar se o número da porta é válido
             throw new InvalidArgumentException("Port is not valid"); // Mensagem de erro
         }
-        if (this.ports.containsKey(port)) { // Verificar se o port já está em uso
+        if (this.ports.containsKey(port - 1)) { // Verificar se o port já está em uso
             throw new InvalidArgumentException("Port is already in use"); // Mensagem de erro
         }
         AbsDeviceNetwork t = ((AbsDeviceNetwork) device);
@@ -196,9 +196,9 @@ public abstract class AbsDeviceNetwork extends AbsDevice implements Serializable
 
     public List<Integer> getEmptyPorts() {
         List<Integer> emptyPorts = new ArrayList<>();
-        for (int i = 0; i < this.getPortsAmount(); i++) {
+        for (int i = 1; i <= this.getPortsAmount(); i++) {
             if (this.ports.get(i) == null) {
-                emptyPorts.add(i + 1);
+                emptyPorts.add(i);
             }
         }
         return emptyPorts;

@@ -60,11 +60,11 @@ public class SelectedDeviceScreen extends AbsScreen {
         if (device instanceof AbsDeviceNetwork)
             System.out.println("Número de portas: " + ((AbsDeviceNetwork) device).getPortsAmount());
         if (device instanceof AbsDeviceNetwork) {
-            for (int i = 0; i < ((AbsDeviceNetwork) device).getPortsAmount(); i++) {
+            for (int i = 1; i <= ((AbsDeviceNetwork) device).getPortsAmount(); i++) {
                 try {
-                    System.out.println("\tPorta " + (i + 1) + ": " + ((AbsDeviceNetwork) device).getPort(i).getMac());
+                    System.out.println("\tPorta " + (i) + ": " + ((AbsDeviceNetwork) device).getPort(i).getMac());
                 } catch (Exception e) {
-                    System.out.println("\tPorta " + (i + 1) + ": " + "Vazio");
+                    System.out.println("\tPorta " + (i) + ": " + "Vazio");
                 }
             }
         }
@@ -244,6 +244,13 @@ public class SelectedDeviceScreen extends AbsScreen {
         scanner.nextLine();
         if (option == 0)
             return;
+        AbsDevice deviceToConnect = connectable.get(option - 1);
+        if (deviceToConnect instanceof AbsDeviceNetwork)
+            if (((AbsDeviceNetwork) deviceToConnect).getEmptyPorts().size() == 0) {
+                System.out.println("Não há portas disponíveis");
+                super.pressEnterToContinue();
+                return;
+            }
         int port = 0;
         if (this.device instanceof AbsDeviceNetwork) {
             while (true) {
@@ -265,7 +272,6 @@ public class SelectedDeviceScreen extends AbsScreen {
                 }
             }
         }
-        AbsDevice deviceToConnect = connectable.get(option - 1);
         try {
             if (device instanceof AbsDeviceEnd) {
                 if (deviceToConnect instanceof AbsDeviceEnd)
@@ -297,11 +303,11 @@ public class SelectedDeviceScreen extends AbsScreen {
                             System.out.println("Porta inválida");
                         }
                     }
-                    ((AbsDeviceEnd) this.device).setConnectedDevice((AbsDeviceNetwork) deviceToConnect, port - 1);
+                    ((AbsDeviceEnd) this.device).setConnectedDevice((AbsDeviceNetwork) deviceToConnect, port);
                 }
             } else if (this.device instanceof AbsDeviceNetwork) {
                 if (deviceToConnect instanceof AbsDeviceEnd) {
-                    ((AbsDeviceNetwork) this.device).setPort(port - 1, (AbsDeviceEnd) deviceToConnect);
+                    ((AbsDeviceNetwork) this.device).setPort(port, (AbsDeviceEnd) deviceToConnect);
                     return;
                 }
                 int portDest = 0;
@@ -332,11 +338,12 @@ public class SelectedDeviceScreen extends AbsScreen {
                     }
                 }
                 if (deviceToConnect instanceof AbsDeviceEnd)
-                    ((AbsDeviceNetwork) device).setPort(port - 1, (AbsDeviceEnd) deviceToConnect);
+                    ((AbsDeviceNetwork) device).setPort(port, (AbsDeviceEnd) deviceToConnect);
                 else if (deviceToConnect instanceof AbsDeviceNetwork)
-                    ((AbsDeviceNetwork) device).setPort(port - 1, (AbsDeviceNetwork) deviceToConnect, portDest - 1);
+                    ((AbsDeviceNetwork) device).setPort(port, (AbsDeviceNetwork) deviceToConnect, portDest);
             }
         } catch (Exception e) {
+            System.out.println(e);
             System.out.println("Erro ao conectar");
         }
         new DataManager().saveDevices();
@@ -363,7 +370,8 @@ public class SelectedDeviceScreen extends AbsScreen {
                     ((AbsDeviceEnd) device).forceSetConnectedDevice(null);
                     ((AbsDeviceEnd) connected).forceSetConnectedDevice(null);
                 } else if (connected instanceof AbsDeviceNetwork) {
-                    for (int i = 0; i < ((AbsDeviceNetwork) connected).getPortsAmount(); i++) {
+                    System.out.println(((AbsDeviceNetwork) connected).getPorts());
+                    for (int i = 1; i <= ((AbsDeviceNetwork) connected).getPortsAmount(); i++) {
                         AbsDevice d = ((AbsDeviceNetwork) connected).getPort(i);
                         if (d != null && d.equals(device)) {
                             ((AbsDeviceNetwork) connected).removePort(i);
@@ -372,7 +380,6 @@ public class SelectedDeviceScreen extends AbsScreen {
                     }
                 }
             } catch (Exception e) {
-                System.out.println(e);
                 System.out.println("Não há dispositivo conectado");
             }
         else if (device instanceof AbsDeviceNetwork) {
@@ -381,10 +388,9 @@ public class SelectedDeviceScreen extends AbsScreen {
             int port = scanner.nextInt();
             scanner.nextLine();
             try {
-                ((AbsDeviceNetwork) device).removePort(port-1);
+                ((AbsDeviceNetwork) device).removePort(port);
                 System.out.println("Desconectado com sucesso!");
             } catch (Exception e) {
-                System.out.println(e);
                 System.out.println("Não há dispositivo conectado");
             }
         }

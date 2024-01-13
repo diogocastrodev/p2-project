@@ -37,8 +37,13 @@ public class Logger {
         if (lastLog.equals("") || lastLog.equals(null)) {
             // Search for the last log file in the folder
             File folder = new File(folderPath);
+            if (!folder.exists()) {
+                // Create folder if it doesn't exist
+                folder.mkdirs();
+            }
             File[] listOfFiles = folder.listFiles();
-            if (listOfFiles.length == 0) {
+            if (listOfFiles.length == 0 || listOfFiles == null) {
+                // No log files
                 return;
             }
             File lastModifiedFile = listOfFiles[0];

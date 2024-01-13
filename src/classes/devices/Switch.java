@@ -40,7 +40,10 @@ public class Switch extends AbsDeviceNetwork implements Serializable {
      */
     public Packet sendPacket(Packet packet, AbsDevice sender) {
         for (AbsDevice device : this.getPorts().values()) {
-            this.sendPacket(packet, sender, device);
+            Packet p = this.sendPacket(packet, sender, device);
+            if (p != null) {
+                return p;
+            }
         }
         return null;
     }
