@@ -3,6 +3,10 @@ package screens.select;
 import abstracts.AbsDevice;
 import abstracts.AbsScreen;
 import cache.DevicesCache;
+import classes.devices.Device;
+import classes.devices.Hub;
+import classes.devices.Router;
+import classes.devices.Switch;
 import classes.exceptions.InvalidOptionException;
 import screens.select.selected.SelectedDeviceScreen;
 
@@ -20,7 +24,17 @@ public class SelectDeviceScreen extends AbsScreen {
         int i = 1;
         for (String mac : c.keySet()) {
             AbsDevice device = c.get(mac);
-            System.out.println(i + ". " + super.convertStatus(device.getStatus()) + " " + device.getMac() + " -> " + device.getIP());
+            String deviceType = "Unknown";
+            if (device instanceof Device) {
+                deviceType = "Computador";
+            } else if (device instanceof Router) {
+                deviceType = "Router";
+            } else if (device instanceof Switch) {
+                deviceType = "Switch";
+            } else if (device instanceof Hub) {
+                deviceType = "Hub";
+            }
+            System.out.println(i + ". " + super.convertStatus(device.getStatus()) + " [" + deviceType + "] " + device.getMac() + " -> " + device.getIP());
             macs.add(mac);
             i++;
         }
